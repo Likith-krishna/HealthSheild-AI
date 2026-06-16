@@ -14,20 +14,20 @@ if (fs.existsSync(configPath)) {
     const configData = JSON.parse(fs.readFileSync(configPath, "utf-8"));
     if (configData && configData.projectId) {
       let appConfig: any = { projectId: configData.projectId };
-      
+
       // If service account is available, use it directly to avoid ADC errors
       if (fs.existsSync(serviceAccountPath)) {
         const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
         appConfig = { credential: cert(serviceAccount) };
       }
-      
+
       const app = getApps().length === 0 ? initializeApp(appConfig) : getApp();
-      
+
       const dbId = configData.firestoreDatabaseId || "(default)";
       firestoreDb = getFirestore(app, dbId);
       isFirebaseActive = true;
       console.log(`🔥 Firebase Admin initialized successfully for custom database ID: "${dbId}"`);
-      
+
       // Asynchronously verify active read access to avoid throwing runtime PERMISSION_DENIED on users collection
       firestoreDb.collection("users").limit(1).get()
         .then(() => {
@@ -53,7 +53,7 @@ if (fs.existsSync(configPath)) {
       firestoreDb = getFirestore(app);
       isFirebaseActive = true;
       console.log("🔥 Firebase Admin initialized successfully from process.env backup configurations!");
-      
+
       // Asynchronously verify active read access to avoid throwing runtime PERMISSION_DENIED on users collection
       firestoreDb.collection("users").limit(1).get()
         .then(() => {
