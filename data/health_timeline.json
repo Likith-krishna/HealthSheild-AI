@@ -1,0 +1,164 @@
+[
+  {
+    "userId": "u_fl621ckge",
+    "basicInfo": {
+      "age": 16,
+      "gender": "Male",
+      "height": 172,
+      "weight": 65,
+      "bmi": 22,
+      "occupation": "student",
+      "systolicBP": 9,
+      "diastolicBP": 87,
+      "bloodSugar": 99,
+      "cholesterolTotal": 89,
+      "hba1c": 5.7,
+      "ldlCholesterol": 100,
+      "hdlCholesterol": 50,
+      "triglycerides": 150,
+      "serumCreatinine": 0.9,
+      "altSgpt": 30,
+      "tsh": 2.1
+    },
+    "mentalHealth": {
+      "score": 85,
+      "anxietyLevel": 3,
+      "stressLevel": 4,
+      "notes": "Integrated psychiatric check",
+      "recommendations": []
+    },
+    "lifestyle": {
+      "sleepDuration": 7,
+      "sleepQuality": 4,
+      "stressLevel": 5,
+      "physicalActivity": "Moderate",
+      "sittingHours": 6,
+      "smoking": "No",
+      "alcohol": "No"
+    },
+    "nutrition": {
+      "mealPattern": "Balanced",
+      "junkFoodRate": 3,
+      "sugarRate": 3,
+      "waterIntake": 2.5
+    },
+    "medicalHistory": {
+      "existingDiseases": "None",
+      "previousDiagnosis": "None",
+      "surgeries": "None",
+      "infections": "None",
+      "allergies": "None",
+      "currentMedications": "None",
+      "familyHistory": "None"
+    },
+    "wearableDetails": {
+      "steps": 0,
+      "heartRate": 0,
+      "sleepCycle": "None",
+      "activityText": "None"
+    },
+    "analysisResults": {
+      "healthScore": {
+        "score": 84,
+        "category": "Good",
+        "breakdown": {
+          "cardio": 100,
+          "metabolic": 89,
+          "lifestyle": 92,
+          "stress": 60
+        }
+      },
+      "predictions": [
+        {
+          "name": "Type 2 Diabetes",
+          "category": "Metabolic",
+          "probability": 21,
+          "severity": "Mild",
+          "confidenceScore": 65,
+          "progressionRisk": 22,
+          "timeline": "18-24 Months",
+          "triggers": []
+        }
+      ],
+      "timelineForecasts": {
+        "Type 2 Diabetes": {
+          "days30": 3,
+          "days90": 6,
+          "months6": 13,
+          "year1": 21,
+          "years5": 32,
+          "reasons": [
+            "High lipid oxidative rate with sedentary daily patterns.",
+            "Biomarker trajectories suggest progressive cellular insulin resistance under current glucose workload."
+          ]
+        }
+      },
+      "preventiveRoadmap": {
+        "habits": [
+          {
+            "category": "Fitness",
+            "title": "Interval Zone 2 Cardiovascular Walk",
+            "description": "Increase heart rate to 60-70% max for 35 min, 4 days weekly. Stimulates nitric oxide synthase to dilate stiff arteries.",
+            "difficulty": "Easy",
+            "impact": "High"
+          },
+          {
+            "category": "Nutrition",
+            "title": "Increase Soluble Fiber Matrix",
+            "description": "Consume 35g of daily fiber (chia seeds, black beans, heavy greens) to bind bile acids and naturally drop circulating LDL cholesterol.",
+            "difficulty": "Medium",
+            "impact": "High"
+          },
+          {
+            "category": "Sleep",
+            "title": "Circadian Synchronization",
+            "description": "Block cool light panels after sundown. Optimizes growth hormone excretion and cleans brain cellular junk (lymphatic system) at night.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          },
+          {
+            "category": "Stress Management",
+            "title": "Sympathetic Dampening (Box Breathing)",
+            "description": "Perform 4 seconds hold, 4 seconds release cycles. Instantly triggers vagal parasympathetic nerves to downscale blood pressure.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          }
+        ],
+        "dietToInclude": [
+          "Leafy greens (high potassium/nitrates)",
+          "Extra virgin olive oil",
+          "Oats and barley",
+          "Wild salmon (omega-3 fatty acids)",
+          "Avocados",
+          "Green tea"
+        ],
+        "dietToAvoid": [
+          "Refined sugars",
+          "Industrial trans fats",
+          "Sodas and energy drinks",
+          "High-sodium processed meats",
+          "Ultra-processed store cakes"
+        ],
+        "dailyCalorieTarget": 1820,
+        "dailyHydrationTarget": 2500
+      },
+      "alerts": [
+        {
+          "id": "a-healthy",
+          "level": "Green",
+          "category": "Vitals",
+          "message": "Key clinical vitals are in optimal pre-emptive balance.",
+          "remediation": "Maintain your dynamic hydration and continuous cardiovascular training schedule.",
+          "timestamp": "Just Now"
+        }
+      ],
+      "coachingInsights": [
+        "Your current health quotient is indexed at **84/100**.",
+        "The high ratio of fasting glucose and high-normal BP indicate active metabolic compensation.",
+        "Smoking and physical activity are your highest-impact areas for optimization. Smoking cessation immediately decreases stroke and coronary risk curves within the first 120 days."
+      ]
+    },
+    "id": "tl_5w3mt7fvw",
+    "timestamp": "2026-06-16T16:07:45.957Z"
+  }
+]

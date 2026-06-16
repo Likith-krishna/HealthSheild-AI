@@ -1,0 +1,44 @@
+[
+  {
+    "id": "u_fl621ckge",
+    "fullName": "likith",
+    "email": "likithkrishnaj07@gmail.com",
+    "userId": "likith",
+    "hashed_password": "$2b$12$GuCD6ZcPPKDPAFQSUlSPU.tjimdx2EscHlkGF9yge1N4s8sNqb7Na",
+    "phoneNumber": "+91 9282326251",
+    "address": "9/5 || sundareswarar koil st || chennai || royapettah || tamilnadu || India || 600014",
+    "created_at": "2026-06-16T16:04:28.278Z",
+    "updated_at": "2026-06-16T16:06:22.853Z",
+    "last_login": "2026-06-16T16:39:26.320Z",
+    "is_active": true,
+    "email_verified": true
+  },
+  {
+    "id": "u_p6jq97pfo",
+    "fullName": "likith111",
+    "email": "likithkrishna6529@gmail.com",
+    "userId": "likith11",
+    "hashed_password": "$2b$12$3ClXqUwYGX5rNP.WI3VfeuRPHXSiyUDI6Db1TeBnuvvLhCoL2H4Ru",
+    "phoneNumber": "+91 9282326252",
+    "address": "qqqq || qqqq || qq || qq || qq || India",
+    "created_at": "2026-06-16T16:41:00.587Z",
+    "updated_at": "2026-06-16T16:41:00.587Z",
+    "last_login": null,
+    "is_active": true,
+    "email_verified": true
+  },
+  {
+    "id": "u_y6pncolvl",
+    "fullName": "Kamesh",
+    "email": "testotpmail.in@gmail.com",
+    "userId": "kamu",
+    "hashed_password": "$2b$12$w7fCOTz/uwtiovQBJwRwjeoHbnxejAIElV4RD1sv2s9lAIstzzXkm",
+    "phoneNumber": "+91 9098733332",
+    "address": "12 || main || chennai || chennai || tn || India",
+    "created_at": "2026-06-16T17:16:36.623Z",
+    "updated_at": "2026-06-16T17:16:36.623Z",
+    "last_login": null,
+    "is_active": true,
+    "email_verified": true
+  }
+]

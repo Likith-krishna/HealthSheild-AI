@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Zero-Trust Default Deny Master Gate
+    // Because this is a full-stack application, and all direct Firestore queries are mediated
+    // by our secure Express backend proxy using the Firebase Admin Node.js SDK, we can lock down
+    // direct client-side SDK access completely. This prevents database hijacking or data scraping 
+    // even if public client API credentials are extracted from client bundles.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

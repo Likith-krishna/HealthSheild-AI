@@ -1,0 +1,108 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User account demographic profile and credentials",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full legal name" },
+        "email": { "type": "string", "description": "Normalized email address used as login username" },
+        "phoneNumber": { "type": "string", "description": "Contact phone number" },
+        "address": { "type": "string", "description": "Residential street address" },
+        "hashed_password": { "type": "string", "description": "Bcrypt salted credential hashes" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "last_login": { "type": "string", "format": "date-time" },
+        "is_active": { "type": "boolean" },
+        "email_verified": { "type": "boolean" }
+      },
+      "required": ["fullName", "email", "hashed_password", "phoneNumber", "address"]
+    },
+    "LoginHistory": {
+      "title": "LoginHistory",
+      "description": "Historical audit logs of login attempts",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "ip": { "type": "string" },
+        "userAgent": { "type": "string" },
+        "status": { "type": "string", "enum": ["success", "failed"] }
+      },
+      "required": ["userId", "timestamp", "ip", "userAgent", "status"]
+    },
+    "HealthTimeline": {
+      "title": "HealthTimeline",
+      "description": "Timeline entries representing user health state evaluations",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "basicInfo": { "type": "object" },
+        "lifestyle": { "type": "object" },
+        "nutrition": { "type": "object" },
+        "medicalHistory": { "type": "object" },
+        "wearableDetails": { "type": "object" },
+        "analysisResults": { "type": "object" }
+      },
+      "required": ["userId", "timestamp", "basicInfo", "lifestyle", "nutrition", "medicalHistory"]
+    },
+    "Medication": {
+      "title": "Medication",
+      "description": "User current active prescription medications list",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "dosage": { "type": "string" },
+        "frequency": { "type": "string" },
+        "times": { "type": "array" },
+        "foodRelation": { "type": "string" },
+        "startDate": { "type": "string" },
+        "endDate": { "type": "string" },
+        "purpose": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "medicineName", "dosage", "frequency", "times", "foodRelation", "startDate", "purpose"]
+    },
+    "MedicationLog": {
+      "title": "MedicationLog",
+      "description": "Daily audit/history log confirming medication adherence events",
+      "type": "object",
+      "properties": {
+        "medicationId": { "type": "string" },
+        "userId": { "type": "string" },
+        "medicineName": { "type": "string" },
+        "dosage": { "type": "string" },
+        "scheduledTime": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string", "enum": ["Taken", "Skipped", "Snoozed", "Pending"] },
+        "actionTime": { "type": "string", "format": "date-time" }
+      },
+      "required": ["medicationId", "userId", "medicineName", "dosage", "scheduledTime", "date", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles indexed by their generated user IDs"
+    },
+    "/loginHistory/{historyId}": {
+      "schema": "LoginHistory",
+      "description": "Historic security audits list"
+    },
+    "/healthTimeline/{timelineId}": {
+      "schema": "HealthTimeline",
+      "description": "User clinical progression records indexed chronologically"
+    },
+    "/medications/{medicationId}": {
+      "schema": "Medication",
+      "description": "Active medication inventory lists"
+    },
+    "/medicationLogs/{logId}": {
+      "schema": "MedicationLog",
+      "description": "Medication taking logs tracking adherence"
+    }
+  }
+}

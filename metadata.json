@@ -1,0 +1,6 @@
+{
+  "name": "AI Proactive Health Platform",
+  "description": "A production-grade secure health platform featuring encrypted credentials, modern JWT session management, recent logins auditing, and personalized clinical digital twin interfaces.",
+  "requestFramePermissions": ["camera", "microphone", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
