@@ -15,8 +15,16 @@ if (fs.existsSync(configPath)) {
     if (configData && configData.projectId) {
       let appConfig: any = { projectId: configData.projectId };
 
-      // If service account is available, use it directly to avoid ADC errors
-      if (fs.existsSync(serviceAccountPath)) {
+      const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+      const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+      
+      if (privateKey && clientEmail) {
+        appConfig.credential = cert({
+          projectId: configData.projectId,
+          clientEmail,
+          privateKey
+        });
+      } else if (fs.existsSync(serviceAccountPath)) {
         const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
         appConfig = { credential: cert(serviceAccount) };
       }
@@ -47,9 +55,26 @@ if (fs.existsSync(configPath)) {
   const projectId = process.env.FIREBASE_PROJECT_ID;
   if (projectId) {
     try {
-      const app = getApps().length === 0 ? initializeApp({
-        projectId,
-      }) : getApp();
+      let appConfig: any = { projectId };
+      
+      const serviceAccountStr = process.env.FIREBASE_SERVICE_ACCOUNT;
+      const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+      const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+
+      if (privateKey && clientEmail) {
+        appConfig.credential = cert({
+          projectId,
+          clientEmail,
+          privateKey
+        });
+      } else if (serviceAccountStr) {
+        try {
+          const serviceAccount = JSON.parse(serviceAccountStr);
+          appConfig.credential = cert(serviceAccount);
+        } catch (e) {}
+      }
+
+      const app = getApps().length === 0 ? initializeApp(appConfig) : getApp();
       firestoreDb = getFirestore(app);
       isFirebaseActive = true;
       console.log("🔥 Firebase Admin initialized successfully from process.env backup configurations!");
