@@ -194,7 +194,7 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
 
       {/* Main Conversational Board Panel */}
       <div 
-        className={`lg:col-span-7 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl shadow-xl p-5 flex flex-col h-[650px] transition-all duration-250 ${
+        className={`lg:col-span-7 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl shadow-xl p-8 flex flex-col h-[780px] transition-all duration-250 ${
           activeTab === "chat" ? "block" : "hidden lg:flex"
         }`}
       >
@@ -217,7 +217,7 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
         </div>
 
         {/* Scrollable messages container */}
-        <div className="flex-1 overflow-y-auto my-4 space-y-4 pr-1 scrollbar-thin">
+        <div className="flex-1 overflow-y-auto my-6 space-y-6 pr-2 scrollbar-thin">
           {messages.map((m, idx) => (
             <div
               key={idx}
@@ -233,10 +233,10 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
                 {m.role === "user" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
               </div>
 
-              <div className={`rounded-xl p-3.5 text-xs leading-relaxed border ${
+              <div className={`rounded-xl p-5 text-sm leading-loose border ${
                 m.role === "user"
                   ? "bg-gradient-to-br from-neutral-900 to-[#121212] border-emerald-500/15 text-white rounded-tr-none shadow-md"
-                  : "bg-[#050505] border-[#1C1C1C] text-slate-300 rounded-tl-none space-y-3"
+                  : "bg-[#050505] border-[#1C1C1C] text-slate-300 rounded-tl-none space-y-4"
               }`}>
                 {m.role === "assistant" ? (
                   <div className="space-y-2.5">
@@ -343,7 +343,7 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder={loading ? "AI expert is computing..." : "Inquire about insulin sensitivity, hypertension stages..."}
             disabled={loading}
-            className="flex-1 text-xs px-3.5 py-2.5 border border-[#1C1C1C] hover:border-[#2A2A2A] bg-[#050505] rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-500/30 text-white placeholder-slate-600 transition-all font-medium"
+            className="flex-1 text-sm px-4 py-3.5 border border-[#1C1C1C] hover:border-[#2A2A2A] bg-[#050505] rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-500/30 text-white placeholder-slate-600 transition-all font-medium"
           />
           <button
             id="chat-submit"
@@ -358,13 +358,13 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
 
       {/* Proactive Health Observations & Habits Task Board Panel */}
       <div 
-        className={`lg:col-span-5 space-y-5 h-[650px] overflow-y-auto pr-1 scrollbar-thin transition-all duration-250 ${
+        className={`lg:col-span-5 space-y-6 h-[780px] overflow-y-auto pr-2 scrollbar-thin transition-all duration-250 ${
           activeTab === "insights" ? "block" : "hidden lg:block"
         }`}
       >
         
         {/* Dynamic Habit Task Accomplishments card */}
-        <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-4 rounded-2xl shadow-lg space-y-3.5">
+        <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-6 rounded-2xl shadow-lg space-y-5">
           <div className="flex justify-between items-center pb-2.5 border-b border-[#1A1A1A]">
             <span className="text-xs font-black uppercase text-slate-400 tracking-wider font-mono flex items-center gap-1.5">
               <ClipboardList className="h-4 w-4 text-emerald-400" /> Personalized Daily Tasks
@@ -445,7 +445,7 @@ I've flagged key preventative insights for your cardiovascular and metabolic sta
         </div>
 
         {/* Proactive Health Insights & Bio Indicators */}
-        <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-4 rounded-2xl shadow-lg space-y-4">
+        <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-6 rounded-2xl shadow-lg space-y-5">
           <div className="flex justify-between items-center pb-2 border-b border-[#1A1A1A]">
             <span className="text-xs font-black uppercase text-slate-400 tracking-wider font-mono flex items-center gap-1.5">
               <TrendingUp className="h-4 w-4 text-emerald-400" /> Biomarker Analytics

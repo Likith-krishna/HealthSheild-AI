@@ -67,55 +67,11 @@ export default function AICoachPage({ evaluation, selectedRecord }: AICoachPageP
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 gap-6 items-start">
         
-        {/* Chat Component - takes 8 columns */}
-        <div className="lg:col-span-8">
+        {/* Chat Component - takes full width */}
+        <div className="w-full">
           <AICoach profile={profile as any} currentPredictions={currentPredictions} evaluation={evaluation} />
-        </div>
-
-        {/* Explainers and Prompts sidecard - takes 4 columns */}
-        <div className="lg:col-span-4 space-y-6">
-          
-          <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-5 rounded-2xl space-y-4">
-            <span className="text-xs font-black uppercase text-slate-400 tracking-wider font-mono flex items-center gap-1.5">
-              <Sparkles className="h-4.5 w-4.5 text-amber-500" /> Coached Dialogue Rules
-            </span>
-
-            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
-              Your Proactive Companion is pre-loaded with your medical twin diagnostic outputs. You can ask deep physiological queries such as:
-            </p>
-
-            <ul className="space-y-2 text-[10px] text-slate-400 leading-normal list-none">
-              <li className="flex items-start gap-2 bg-[#050505] p-2 rounded-lg border border-[#121212] hover:border-emerald-500/15 transition-all">
-                <span className="text-emerald-400 font-bold font-mono">1.</span>
-                <span>"Why does my systolic pressure raise my cardiovascular prognosis curves?"</span>
-              </li>
-              <li className="flex items-start gap-2 bg-[#050505] p-2 rounded-lg border border-[#121212] hover:border-emerald-500/15 transition-all">
-                <span className="text-emerald-400 font-bold font-mono">2.</span>
-                <span>"Give me a detailed macro breakdown of carbohydrate items I must avoid."</span>
-              </li>
-              <li className="flex items-start gap-2 bg-[#050505] p-2 rounded-lg border border-[#121212] hover:border-emerald-500/15 transition-all">
-                <span className="text-emerald-400 font-bold font-mono">3.</span>
-                <span>"What exercises lower arterial stiffness markers fastest?"</span>
-              </li>
-            </ul>
-          </div>
-
-          <div className="bg-[#0A0A0A] border border-[#1A1A1A] p-5 rounded-2xl flex items-start gap-3 relative overflow-hidden">
-            <div className="absolute right-0 bottom-0 opacity-5 -translate-x-3 translate-y-3">
-              <AlertCircle className="h-20 w-20 text-rose-500" />
-            </div>
-            
-            <AlertCircle className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <span className="text-[10px] font-black uppercase text-rose-400 font-mono">General Disclaimer</span>
-              <p className="text-[10.5px] text-slate-500 leading-relaxed">
-                The Clinical Companion provides AI-driven mathematical trend twin modeling based on standard medical guidelines. Always confirm changes with blood parameters under clinical environments.
-              </p>
-            </div>
-          </div>
-
         </div>
 
       </div>

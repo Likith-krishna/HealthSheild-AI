@@ -160,5 +160,341 @@
     },
     "id": "tl_5w3mt7fvw",
     "timestamp": "2026-06-16T16:07:45.957Z"
+  },
+  {
+    "userId": "u_00dxc98nq",
+    "basicInfo": {
+      "age": 18,
+      "gender": "Male",
+      "height": 172,
+      "weight": 65,
+      "bmi": 22,
+      "occupation": "Unspecified",
+      "systolicBP": 23,
+      "diastolicBP": 234,
+      "bloodSugar": 11,
+      "cholesterolTotal": 11
+    },
+    "mentalHealth": {
+      "score": 85,
+      "anxietyLevel": 3,
+      "stressLevel": 4,
+      "notes": "Integrated psychiatric check",
+      "recommendations": []
+    },
+    "lifestyle": {
+      "sleepDuration": 7,
+      "sleepQuality": 4,
+      "stressLevel": 5,
+      "physicalActivity": "Moderate",
+      "sittingHours": 6,
+      "smoking": "No",
+      "alcohol": "No"
+    },
+    "nutrition": {
+      "mealPattern": "Balanced",
+      "junkFoodRate": 3,
+      "sugarRate": 3,
+      "waterIntake": 2.5
+    },
+    "medicalHistory": {
+      "existingDiseases": "None",
+      "previousDiagnosis": "None",
+      "surgeries": "None",
+      "infections": "None",
+      "allergies": "None",
+      "currentMedications": "None",
+      "familyHistory": "None"
+    },
+    "wearableDetails": {
+      "steps": 0,
+      "heartRate": 0,
+      "sleepCycle": "None",
+      "activityText": "None"
+    },
+    "analysisResults": {
+      "healthScore": {
+        "score": 82,
+        "category": "Good",
+        "breakdown": {
+          "cardio": 100,
+          "metabolic": 100,
+          "lifestyle": 92,
+          "stress": 60
+        }
+      },
+      "predictions": [],
+      "timelineForecasts": {},
+      "preventiveRoadmap": {
+        "habits": [
+          {
+            "category": "Fitness",
+            "title": "Interval Zone 2 Cardiovascular Walk",
+            "description": "Increase heart rate to 60-70% max for 35 min, 4 days weekly. Stimulates nitric oxide synthase to dilate stiff arteries.",
+            "difficulty": "Easy",
+            "impact": "High"
+          },
+          {
+            "category": "Nutrition",
+            "title": "Increase Soluble Fiber Matrix",
+            "description": "Consume 35g of daily fiber (chia seeds, black beans, heavy greens) to bind bile acids and naturally drop circulating LDL cholesterol.",
+            "difficulty": "Medium",
+            "impact": "High"
+          },
+          {
+            "category": "Sleep",
+            "title": "Circadian Synchronization",
+            "description": "Block cool light panels after sundown. Optimizes growth hormone excretion and cleans brain cellular junk (lymphatic system) at night.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          },
+          {
+            "category": "Stress Management",
+            "title": "Sympathetic Dampening (Box Breathing)",
+            "description": "Perform 4 seconds hold, 4 seconds release cycles. Instantly triggers vagal parasympathetic nerves to downscale blood pressure.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          }
+        ],
+        "dietToInclude": [
+          "Leafy greens (high potassium/nitrates)",
+          "Extra virgin olive oil",
+          "Oats and barley",
+          "Wild salmon (omega-3 fatty acids)",
+          "Avocados",
+          "Green tea"
+        ],
+        "dietToAvoid": [
+          "Refined sugars",
+          "Industrial trans fats",
+          "Sodas and energy drinks",
+          "High-sodium processed meats",
+          "Ultra-processed store cakes"
+        ],
+        "dailyCalorieTarget": 1820,
+        "dailyHydrationTarget": 2500
+      },
+      "alerts": [
+        {
+          "id": "a-healthy",
+          "level": "Green",
+          "category": "Vitals",
+          "message": "Key clinical vitals are in optimal pre-emptive balance.",
+          "remediation": "Maintain your dynamic hydration and continuous cardiovascular training schedule.",
+          "timestamp": "Just Now"
+        }
+      ],
+      "coachingInsights": [
+        "Your current health quotient is indexed at **82/100**.",
+        "The high ratio of fasting glucose and high-normal BP indicate active metabolic compensation.",
+        "Smoking and physical activity are your highest-impact areas for optimization. Smoking cessation immediately decreases stroke and coronary risk curves within the first 120 days."
+      ]
+    },
+    "id": "tl_7yopr3r8a",
+    "timestamp": "2026-06-17T17:40:00.921Z"
+  },
+  {
+    "userId": "u_00dxc98nq",
+    "basicInfo": {
+      "age": 11,
+      "gender": "Male",
+      "height": 11,
+      "weight": 223,
+      "bmi": 18429.8,
+      "occupation": "223",
+      "systolicBP": 120,
+      "diastolicBP": 80,
+      "bloodSugar": 100,
+      "cholesterolTotal": 190
+    },
+    "mentalHealth": {
+      "score": 85,
+      "anxietyLevel": 3,
+      "stressLevel": 4,
+      "notes": "Integrated psychiatric check",
+      "recommendations": []
+    },
+    "lifestyle": {
+      "sleepDuration": 7,
+      "sleepQuality": 4,
+      "stressLevel": 5,
+      "physicalActivity": "Moderate",
+      "sittingHours": 6,
+      "smoking": "No",
+      "alcohol": "No"
+    },
+    "nutrition": {
+      "mealPattern": "Balanced",
+      "junkFoodRate": 3,
+      "sugarRate": 3,
+      "waterIntake": 2.5
+    },
+    "medicalHistory": {
+      "existingDiseases": "None",
+      "previousDiagnosis": "None",
+      "surgeries": "None",
+      "infections": "None",
+      "allergies": "None",
+      "currentMedications": "None",
+      "familyHistory": "None"
+    },
+    "wearableDetails": {
+      "steps": 0,
+      "heartRate": 0,
+      "sleepCycle": "None",
+      "activityText": "None"
+    },
+    "analysisResults": {
+      "healthScore": {
+        "score": 72,
+        "category": "Fair",
+        "breakdown": {
+          "cardio": 88,
+          "metabolic": 20,
+          "lifestyle": 92,
+          "stress": 60
+        }
+      },
+      "predictions": [
+        {
+          "name": "Type 2 Diabetes",
+          "category": "Metabolic",
+          "probability": 80,
+          "severity": "Critical",
+          "confidenceScore": 65,
+          "progressionRisk": 84,
+          "timeline": "3-6 Months",
+          "triggers": [
+            "Impaired Fasting Glucose [100 mg/dL]",
+            "Incline in Visceral Fat (BMI: 18429.8)"
+          ]
+        },
+        {
+          "name": "Essential Hypertension",
+          "category": "Cardiovascular",
+          "probability": 46,
+          "severity": "Mild",
+          "confidenceScore": 65,
+          "progressionRisk": 41,
+          "timeline": "Immediate Risk Detected",
+          "triggers": [
+            "High arterial vascular resistance (Vitals: 120/80)"
+          ]
+        },
+        {
+          "name": "Metabolic Dysfunction Fatty Liver",
+          "category": "Liver",
+          "probability": 80,
+          "severity": "Severe",
+          "confidenceScore": 65,
+          "progressionRisk": 68,
+          "timeline": "24-36 Months",
+          "triggers": [
+            "Hepatocyte metabolic overload (BMI: 18429.8)"
+          ]
+        }
+      ],
+      "timelineForecasts": {
+        "Type 2 Diabetes": {
+          "days30": 12,
+          "days90": 24,
+          "months6": 48,
+          "year1": 80,
+          "years5": 100,
+          "reasons": [
+            "High lipid oxidative rate with sedentary daily patterns.",
+            "Biomarker trajectories suggest progressive cellular insulin resistance under current glucose workload."
+          ]
+        },
+        "Essential Hypertension": {
+          "days30": 7,
+          "days90": 14,
+          "months6": 28,
+          "year1": 46,
+          "years5": 69,
+          "reasons": [
+            "High lipid oxidative rate with sedentary daily patterns.",
+            "Biomarker trajectories suggest progressive cellular insulin resistance under current glucose workload."
+          ]
+        },
+        "Metabolic Dysfunction Fatty Liver": {
+          "days30": 12,
+          "days90": 24,
+          "months6": 48,
+          "year1": 80,
+          "years5": 100,
+          "reasons": [
+            "High lipid oxidative rate with sedentary daily patterns.",
+            "Biomarker trajectories suggest progressive cellular insulin resistance under current glucose workload."
+          ]
+        }
+      },
+      "preventiveRoadmap": {
+        "habits": [
+          {
+            "category": "Fitness",
+            "title": "Interval Zone 2 Cardiovascular Walk",
+            "description": "Increase heart rate to 60-70% max for 35 min, 4 days weekly. Stimulates nitric oxide synthase to dilate stiff arteries.",
+            "difficulty": "Easy",
+            "impact": "High"
+          },
+          {
+            "category": "Nutrition",
+            "title": "Increase Soluble Fiber Matrix",
+            "description": "Consume 35g of daily fiber (chia seeds, black beans, heavy greens) to bind bile acids and naturally drop circulating LDL cholesterol.",
+            "difficulty": "Medium",
+            "impact": "High"
+          },
+          {
+            "category": "Sleep",
+            "title": "Circadian Synchronization",
+            "description": "Block cool light panels after sundown. Optimizes growth hormone excretion and cleans brain cellular junk (lymphatic system) at night.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          },
+          {
+            "category": "Stress Management",
+            "title": "Sympathetic Dampening (Box Breathing)",
+            "description": "Perform 4 seconds hold, 4 seconds release cycles. Instantly triggers vagal parasympathetic nerves to downscale blood pressure.",
+            "difficulty": "Easy",
+            "impact": "Medium"
+          }
+        ],
+        "dietToInclude": [
+          "Leafy greens (high potassium/nitrates)",
+          "Extra virgin olive oil",
+          "Oats and barley",
+          "Wild salmon (omega-3 fatty acids)",
+          "Avocados",
+          "Green tea"
+        ],
+        "dietToAvoid": [
+          "Refined sugars",
+          "Industrial trans fats",
+          "Sodas and energy drinks",
+          "High-sodium processed meats",
+          "Ultra-processed store cakes"
+        ],
+        "dailyCalorieTarget": 4906,
+        "dailyHydrationTarget": 2500
+      },
+      "alerts": [
+        {
+          "id": "a-glu-orange",
+          "level": "Orange",
+          "category": "Biomarkers",
+          "message": "Prediabetic Hyperglycemia Status (100 mg/dL)",
+          "remediation": "Initiate resistance training to promote non-insulin dependent glucose uptake, and eliminate insulin-spiking simple sugars.",
+          "timestamp": "Just Now"
+        }
+      ],
+      "coachingInsights": [
+        "Your current health quotient is indexed at **72/100**.",
+        "The high ratio of fasting glucose and high-normal BP indicate active metabolic compensation.",
+        "Smoking and physical activity are your highest-impact areas for optimization. Smoking cessation immediately decreases stroke and coronary risk curves within the first 120 days."
+      ]
+    },
+    "id": "tl_eqfifab1b",
+    "timestamp": "2026-06-17T17:40:14.271Z"
   }
 ]
