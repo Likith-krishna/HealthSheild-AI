@@ -132,8 +132,9 @@ export default function LoginPage({ onLoginSuccess, onNavigateToRegister }: Logi
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 shadow-md" />
 
             <div className="mb-7 text-center">
-              <div className="mx-auto h-12 w-12 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 mb-3 shadow-[0_0_15px_rgba(16,185,129,0.05)]">
-                <ShieldCheck className="h-6 w-6" />
+              <div className="mx-auto flex items-center justify-center mb-5 relative">
+                <div className="absolute h-20 w-20 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none" />
+                <img src="/custom-logo.png" alt="HealthShield Logo" className="h-24 w-24 object-contain relative drop-shadow-[0_0_15px_rgba(16,185,129,0.25)] scale-110" />
               </div>
               <h2 className="text-2xl font-black text-white tracking-tight uppercase sm:text-3xl">{t("auth.login_title", "Secure Authorization")}</h2>
               <p className="text-xs text-slate-400 mt-1 font-medium">{t("auth.login_desc", "HealthSheild AI Cryptographic Access Control")}</p>

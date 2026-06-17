@@ -357,8 +357,9 @@ export default function DashboardPage({ currentUser, onLogout }: DashboardPagePr
         {/* Superior header */}
         <header className="bg-[#0A0A0A]/80 border border-[#1A1A1A] rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-xl backdrop-blur-xl">
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="h-10 w-10 bg-emerald-500/15 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 shrink-0">
-              <ShieldCheck className="h-5.5 w-5.5" />
+            <div className="relative h-16 w-16 flex items-center justify-center shrink-0">
+              <div className="absolute h-10 w-10 bg-emerald-500/20 rounded-full blur-xl pointer-events-none" />
+              <img src="/custom-logo.png" alt="Logo" className="h-16 w-16 object-contain relative drop-shadow-[0_0_10px_rgba(16,185,129,0.3)] scale-110" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">

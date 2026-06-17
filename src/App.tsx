@@ -72,19 +72,18 @@ export default function App() {
             className="fixed inset-0 bg-[#050505] z-50 flex flex-col items-center justify-center gap-4"
           >
             <div className="relative flex items-center justify-center">
-              {/* Spinning perimeter glow */}
-              <div className="absolute h-16 w-16 bg-emerald-500/10 rounded-full animate-ping blur-xl" />
-              <div className="h-12 w-12 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
-              <ShieldCheck className="absolute h-5 w-5 text-emerald-400" />
+              {/* Glowing aura for transparent logo */}
+              <div className="absolute h-40 w-40 bg-emerald-500/20 rounded-full animate-pulse blur-3xl" />
+              <img src="/custom-logo.png" alt="HealthShield" className="relative h-36 w-36 object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.4)]" />
             </div>
-            <div className="text-center space-y-1 mt-2">
+            <div className="text-center space-y-1 mt-4">
               <motion.span 
                 initial={{ opacity: 0, y: 5 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-lg text-emerald-400 font-sans font-bold tracking-widest uppercase flex items-center justify-center gap-2"
+                className="text-2xl text-emerald-400 font-sans font-bold tracking-widest uppercase flex items-center justify-center gap-3"
               >
-                <Sparkles className="h-5 w-5 animate-pulse" />
+                <img src="/custom-logo.png" alt="HealthShield" className="h-8 w-8 object-contain" />
                 HealthShield AI
               </motion.span>
               <motion.p 
