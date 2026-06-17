@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PasswordStrengthIndicator from "./PasswordStrengthIndicator";
 import { authApi } from "../lib/api";
-import axios from "axios";
 import { motion, AnimatePresence } from "motion/react";
 import { User, Mail, Lock, Phone, MapPin, Eye, EyeOff, Loader2, CheckCircle2, ShieldAlert, ArrowRight, Sparkles } from "lucide-react";
 
@@ -17,42 +16,6 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   
-  // OTP Verification States
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpValue, setOtpValue] = useState("");
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [isOtpLoading, setIsOtpLoading] = useState(false);
-
-  const handleSendOtp = async () => {
-    try {
-      setIsOtpLoading(true);
-      setServerError("");
-      await axios.post("/api/auth/send-otp", { email });
-      setOtpSent(true);
-    } catch (err: any) {
-      setServerError(err.response?.data?.error || "Failed to send OTP.");
-    } finally {
-      setIsOtpLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (otpValue.length !== 6) {
-      setServerError("Please enter a valid 6-digit OTP code.");
-      return;
-    }
-    try {
-      setIsOtpLoading(true);
-      setServerError("");
-      await axios.post("/api/auth/verify-otp", { email, otp: otpValue });
-      setEmailVerified(true);
-      setOtpSent(false);
-    } catch (err: any) {
-      setServerError(err.response?.data?.error || "Invalid OTP code.");
-    } finally {
-      setIsOtpLoading(false);
-    }
-  };
   
   // Elaborated Phone & Address States
   const [countryCode, setCountryCode] = useState("+91");
@@ -251,7 +214,6 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
                     <input
                       type="email"
                       required
-                      disabled={emailVerified}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="name@organization.com"
@@ -260,60 +222,11 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
                       } text-sm text-white px-10.5 py-2.5 rounded-xl shadow-inner outline-none transition-all placeholder-slate-600 focus:ring-1 focus:ring-emerald-500/20`}
                     />
                   </div>
-                  {!emailVerified && (
-                    <button
-                      type="button"
-                      disabled={!email || !!valErrors.email || otpSent || isOtpLoading}
-                      onClick={handleSendOtp}
-                      className="shrink-0 bg-[#121212] border border-[#222] hover:border-emerald-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-emerald-400 font-bold text-xs px-4 py-2.5 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
-                    >
-                      {isOtpLoading && !otpSent ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
-                      {otpSent ? "OTP Sent" : "Verify Email"}
-                    </button>
-                  )}
-                  {emailVerified && (
-                    <div className="shrink-0 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-xs px-4 py-2.5 rounded-xl flex items-center justify-center gap-1.5 shadow-inner">
-                      <CheckCircle2 className="h-4 w-4" /> Verified
-                    </div>
-                  )}
                 </div>
                 {valErrors.email && (
                   <span className="text-[10px] text-red-400 block mt-0.5 font-medium">{valErrors.email}</span>
                 )}
               </div>
-
-              {/* OTP Input Space (Only shown after OTP is sent) */}
-              <AnimatePresence>
-                {otpSent && !emailVerified && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                    animate={{ opacity: 1, height: "auto", marginTop: 12 }}
-                    exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                    className="space-y-1.5 overflow-hidden"
-                  >
-                    <label className="text-emerald-400 text-[10px] font-bold uppercase tracking-wider block">Enter 6-Digit Email OTP</label>
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        maxLength={6}
-                        value={otpValue}
-                        onChange={(e) => setOtpValue(e.target.value.replace(/\D/g, ''))}
-                        placeholder="000000"
-                        className="flex-1 bg-[#090909] border border-emerald-500/20 focus:border-emerald-500/60 text-sm text-center tracking-widest text-white px-4 py-2.5 rounded-xl outline-none transition-all focus:ring-1 focus:ring-emerald-500/30"
-                      />
-                      <button
-                        type="button"
-                        disabled={isOtpLoading}
-                        onClick={handleVerifyOtp}
-                        className="shrink-0 bg-gradient-to-r from-emerald-500 to-teal-600 hover:opacity-90 disabled:opacity-50 text-black font-extrabold text-xs px-5 py-2.5 rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
-                      >
-                        {isOtpLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
-                        Confirm
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
               {/* Password and Confirm fields double columns */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -512,7 +425,7 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
               {/* Submit launcher */}
               <button
                 type="submit"
-                disabled={isSubmitting || Object.keys(valErrors).length > 0 || !emailVerified}
+                disabled={isSubmitting || Object.keys(valErrors).length > 0}
                 className="w-full mt-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:opacity-90 disabled:opacity-40 select-none text-black font-extrabold cursor-pointer rounded-xl py-3 px-5 text-sm transition-all shadow-md shadow-emerald-500/10 flex items-center justify-center gap-1.5 hover:shadow-lg hover:shadow-emerald-500/20"
               >
                 {isSubmitting ? (
@@ -522,7 +435,7 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
                   </>
                 ) : (
                   <>
-                    {!emailVerified ? "VERIFY EMAIL TO CONTINUE" : "ESTABLISH SECURE ACCOUNT"}
+                    ESTABLISH SECURE ACCOUNT
                     <ArrowRight className="h-4 w-4 stroke-[2.5] text-black" />
                   </>
                 )}

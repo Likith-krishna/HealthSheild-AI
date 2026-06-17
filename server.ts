@@ -5,7 +5,6 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { createServer as createViteServer } from "vite";
 import { UserRepository, TimelineRepository, MedicationRepository, MedicationLogRepository } from "./server/db.js";
 import { SecurityService } from "./server/auth_service.js";
-import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -42,86 +41,6 @@ const requireAuth = (req: any, res: any, next: any) => {
 
 // Expose both /auth and /api/auth paths to ensure compatibility with all frontends
 const authRouter = express.Router();
-
-// Simple in-memory OTP store (email -> { otp, expiresAt })
-const otpStore = new Map<string, { otp: string, expiresAt: number }>();
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.SMTP_EMAIL,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
-
-authRouter.post("/send-otp", async (req, res) => {
-  const { email } = req.body;
-  if (!email || !email.includes("@")) {
-    return res.status(400).json({ error: "Valid email required." });
-  }
-
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  otpStore.set(email.toLowerCase(), {
-    otp,
-    expiresAt: Date.now() + 10 * 60 * 1000 // 10 minutes expiry
-  });
-
-  try {
-    await transporter.sendMail({
-      from: `"HealthSheild AI" <${process.env.SMTP_EMAIL}>`,
-      to: email,
-      subject: "Your HealthSheild AI Verification Code",
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h2 style="color: #10B981; text-align: center;">HealthSheild AI</h2>
-          <p>You have requested to establish a secure profile.</p>
-          <p>Please use the following 6-digit OTP to verify your email address. This code expires in 10 minutes.</p>
-          <div style="background-color: #f4f4f5; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 5px; margin: 20px 0;">
-            ${otp}
-          </div>
-          <p style="font-size: 12px; color: #666; text-align: center;">If you did not request this, please ignore this email.</p>
-        </div>
-      `
-    });
-    res.json({ message: "OTP Sent successfully." });
-  } catch (error) {
-    console.error("Failed to send OTP email:", error);
-    
-    // HACKATHON BYPASS: If email fails for ANY reason (firewalls, bad password, timeouts),
-    // we silently override the OTP to "123456" so the presentation/demo never gets stuck.
-    console.warn("⚠️ Email failed! Activating Hackathon Bypass: OTP set to '123456'");
-    otpStore.set(email.toLowerCase(), {
-      otp: "123456",
-      expiresAt: Date.now() + 10 * 60 * 1000
-    });
-    res.json({ message: "OTP Sent successfully. (Bypass Active)" });
-  }
-});
-
-authRouter.post("/verify-otp", async (req, res) => {
-  const { email, otp } = req.body;
-  if (!email || !otp) {
-    return res.status(400).json({ error: "Email and OTP are required." });
-  }
-
-  const record = otpStore.get(email.toLowerCase());
-  if (!record) {
-    return res.status(400).json({ error: "No OTP request found for this email." });
-  }
-
-  if (Date.now() > record.expiresAt) {
-    otpStore.delete(email.toLowerCase());
-    return res.status(400).json({ error: "OTP has expired. Please request a new one." });
-  }
-
-  if (record.otp !== otp) {
-    return res.status(400).json({ error: "Invalid OTP code." });
-  }
-
-  // OTP is valid
-  otpStore.delete(email.toLowerCase());
-  res.json({ message: "Email successfully verified." });
-});
 
 // 1. User Registration Route
 authRouter.post("/register", async (req, res) => {
