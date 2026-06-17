@@ -393,7 +393,7 @@ export default function HealthCollectionForm({ userId, onTimelineSaved }: Health
   });
   const [listeningMental, setListeningMental] = useState(false);
   const [mentalChat, setMentalChat] = useState<any[]>([
-    { sender: "bot", text: "Welcome to Aegis Counseling. I'm here to translate biometric stresses into holistic care structures. Speak or type how you feel." }
+    { sender: "bot", text: "Welcome to HealthSheild AI Counseling. I'm here to translate biometric stresses into holistic care structures. Speak or type how you feel." }
   ]);
   const [mentalChatLoading, setMentalChatLoading] = useState(false);
   const [mentalInput, setMentalInput] = useState("");
@@ -667,7 +667,7 @@ export default function HealthCollectionForm({ userId, onTimelineSaved }: Health
       lang === "hi" ? "?8 5I/8 >!G8 *M0>0- 9K 09> 9Hd " :
       lang === "ml" ? "?8M 5K/M8M H!{8M 0-?MA(M(A. " :
       lang === "kn" ? "����� �͵�� ���͗��Ͷ� �Ͱ���������ͤ���. " :
-      "Initializing Aegis Voice Guided Intake. ";
+      "Initializing HealthSheild AI Voice Guided Intake. ";
       
     speakText(initialGreeting + q.text, () => {
       startListening(0);

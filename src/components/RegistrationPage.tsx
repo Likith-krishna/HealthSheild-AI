@@ -150,7 +150,7 @@ export default function RegistrationPage({ onRegisterSuccess, onNavigateToLogin 
                 Create Account
               </h2>
               <p className="text-xs text-slate-400 font-medium mt-1">
-                Establish secure profile access on AegisHealth Server
+                Establish secure profile access on HealthSheild AI Server
               </p>
             </div>
 

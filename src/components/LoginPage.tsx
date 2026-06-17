@@ -134,7 +134,7 @@ export default function LoginPage({ onLoginSuccess, onNavigateToRegister }: Logi
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <h2 className="text-2xl font-black text-white tracking-tight uppercase sm:text-3xl">Secure Authorization</h2>
-              <p className="text-xs text-slate-400 mt-1 font-medium">AegisHealth Cryptographic Access Control</p>
+              <p className="text-xs text-slate-400 mt-1 font-medium">HealthSheild AI Cryptographic Access Control</p>
             </div>
 
             {/* Error notifications banner */}

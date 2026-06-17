@@ -354,7 +354,7 @@ export default function DashboardPage({ currentUser, onLogout }: DashboardPagePr
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h1 className="text-sm font-black text-white uppercase tracking-wider font-mono">AegisHealth Pro</h1>
+                <h1 className="text-sm font-black text-white uppercase tracking-wider font-mono">HealthSheild AI</h1>
                 <span className="text-[9px] bg-emerald-500/10 text-emerald-400 font-extrabold px-1.5 py-0.5 rounded border border-emerald-500/20 lowercase">
                   clinical nodes
                 </span>
@@ -392,7 +392,7 @@ export default function DashboardPage({ currentUser, onLogout }: DashboardPagePr
         {/* Mobile Navigation Dropdown/Drawer list */}
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-[#0A0A0A]/95 border border-[#1A1A1A] rounded-2xl p-4 space-y-2 shadow-2xl relative z-50">
-            <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase block mb-1">Aegis Operations Portal</span>
+            <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase block mb-1">HealthSheild AI Operations Portal</span>
             {sidebarLinks.map((link) => {
               const IconComponent = link.icon;
               return (
@@ -466,7 +466,7 @@ export default function DashboardPage({ currentUser, onLogout }: DashboardPagePr
           
           {/* Enhanced persistent sidebar tab list menu */}
           <div className="hidden lg:block lg:col-span-3 space-y-2 bg-[#0A0A0A]/40 border border-[#1A1A1A] p-4 rounded-2xl shadow-xl backdrop-blur-md">
-            <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase block mb-1">Aegis Operations Portal</span>
+            <span className="text-[10px] text-slate-500 font-mono tracking-widest uppercase block mb-1">HealthSheild AI Operations Portal</span>
             
             {sidebarLinks.map((link) => {
               const IconComponent = link.icon;

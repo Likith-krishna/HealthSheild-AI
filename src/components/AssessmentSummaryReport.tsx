@@ -278,9 +278,9 @@ export default function AssessmentSummaryReport({ evaluation, selectedRecord, us
               <div className="h-7 w-7 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center font-bold">
                 <FileText className="h-4 w-4" />
               </div>
-              <h1 className="text-sm font-black text-white font-mono uppercase tracking-widest print-text-dark">AegisHealth Clinical Labs</h1>
+              <h1 className="text-sm font-black text-white font-mono uppercase tracking-widest print-text-dark">HealthSheild AI Clinical Labs</h1>
             </div>
-            <p className="text-[10px] text-slate-500 font-mono print-text-muted">Digital Twin Early Diagnostics | License Code: AEGIS-782-SYS</p>
+            <p className="text-[10px] text-slate-500 font-mono print-text-muted">Digital Twin Early Diagnostics | License Code: HEALTHSHEILD-782-SYS</p>
             <p className="text-[9px] bg-emerald-500/10 text-emerald-400 px-2.5 py-0.5 rounded border border-emerald-500/20 font-mono uppercase tracking-wider inline-block mt-1 print-badge">
               Clinical Twin Report synchronized
             </p>
@@ -299,7 +299,7 @@ export default function AssessmentSummaryReport({ evaluation, selectedRecord, us
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-medium">
             <div>
               <span className="text-[9px] text-[#71717A] uppercase block">FullName</span>
-              <strong className="text-[#E4E4E7] block mt-0.5 print-text-dark">{user.fullName || "Aegis Participant"}</strong>
+              <strong className="text-[#E4E4E7] block mt-0.5 print-text-dark">{user.fullName || "HealthSheild AI Participant"}</strong>
             </div>
             <div>
               <span className="text-[9px] text-[#71717A] uppercase block">Age / Biological Gating</span>
@@ -581,7 +581,7 @@ export default function AssessmentSummaryReport({ evaluation, selectedRecord, us
             *Clinical Twin Statement: This model uses predictive wellness algorithms and automated medical guidelines simulations. It provides mathematical indications of potential risk trajectories rather than absolute medical diagnoses. Please check and verify your clinical blood scores with actual primary care physicians prior to altering medical regimens.
           </p>
           <div className="text-left sm:text-right shrink-0">
-            <span className="block font-bold uppercase text-slate-400 print-text-dark font-mono">AegisHealth Intelligence</span>
+            <span className="block font-bold uppercase text-slate-400 print-text-dark font-mono">HealthSheild AI Intelligence</span>
             <span className="text-[8px] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded mt-1 inline-block uppercase font-mono tracking-widest print-badge">
               Active node verified
             </span>

@@ -176,7 +176,8 @@ function InnerMapComponent({
     if (!map || !searchQuery) return;
 
     setSearching(true);
-    setError("");
+    // Do not erase Geocoding API failure messages so the user can see their API key status
+    setError((prev) => prev.includes("Geocoding API") ? prev : "");
 
     // Fallback search using PlacesService
     const runPlacesServiceFallback = () => {
@@ -205,7 +206,7 @@ function InnerMapComponent({
               setActiveHospital(validResult[0]);
             }
           } else {
-            setError("No established clinics found in Google search. Restoring general multi-speciality hospitals.");
+            // Silently fall back to general hospitals without throwing an error banner
             fetchGeneralHospitals();
           }
         });
@@ -354,7 +355,10 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
   const [criticalRuleAlert, setCriticalRuleAlert] = useState(false);
 
   // Address geocoder helpers
-  const [manualAddress, setManualAddress] = useState(user.address || "");
+  const userAddrParts = (user.address || "").split(" || ");
+  const [manualHouse, setManualHouse] = useState(userAddrParts[0] || "");
+  const [manualStreet, setManualStreet] = useState(userAddrParts[1] || "");
+  const [manualArea, setManualArea] = useState(userAddrParts.slice(2).join(", ") || "");
 
   // Compile calculated risks from AI prediction output
   useEffect(() => {
@@ -461,14 +465,32 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
   // Convert profile address to lat-lng using Google Geocoding fallback
   const geocodeAddressFallback = (customAddressText?: string) => {
     setGpsLoading(false);
-    const targetAddr = customAddressText || manualAddress;
+    let targetAddr = customAddressText;
     if (!targetAddr) {
+      targetAddr = `${manualHouse} || ${manualStreet} || ${manualArea}`;
+    }
+    if (!targetAddr || targetAddr.trim() === "||  ||") {
       setError("No address is registered for fallback Geocoding lookup.");
       return;
     }
 
-    // Format clean geocodable string by converting split operators to comma
-    const cleanStr = targetAddr.replace(/ \|\| /g, ", ").trim();
+    // Create a robust progressive fallback chain to maximize precision
+    const queries: string[] = [];
+    if (manualHouse && manualStreet && manualArea) queries.push(`${manualHouse}, ${manualStreet}, ${manualArea}`);
+    if (manualStreet && manualArea) queries.push(`${manualStreet}, ${manualArea}`);
+    if (manualArea) {
+      queries.push(manualArea);
+      const areaParts = manualArea.split(',').map(p => p.trim());
+      if (areaParts.length > 1) {
+        // Absolute fallback: extract just the first city token and the country to prevent district collision errors
+        queries.push(`${areaParts[0]}, ${areaParts[areaParts.length - 1]}`);
+      }
+    }
+    
+    // Default fallback if manual fields are empty
+    if (queries.length === 0) {
+      queries.push(targetAddr.replace(/ \|\| /g, ", ").trim());
+    }
 
     if (!(window as any).google?.maps?.Geocoder) {
       setError("Google Maps Geocoder is initializing. Using system fallback coordinate metrics.");
@@ -476,18 +498,29 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
     }
 
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: cleanStr }, (results, status) => {
-      if (status === google.maps.GeocoderStatus.OK && results?.[0]?.geometry?.location) {
-        const loc = results[0].geometry.location;
-        const calculatedPos = { lat: loc.lat(), lng: loc.lng() };
-        setCoordinates(calculatedPos);
-        setUserLocationSource(`Location resolving via Profile Geocoding: ${results[0].formatted_address}`);
-      } else {
-        setError(`Address lookup unsuccessful. Status: ${status}. Default coordinates restored.`);
+    
+    const attemptGeocode = (attemptIndex: number, lastStatus: string = "UNKNOWN") => {
+      if (attemptIndex >= queries.length) {
         setCoordinates({ lat: 13.0827, lng: 80.2707 }); // Chennai baseline fallback coordinate
-        setUserLocationSource("Global System Default (GPS & Geocoding Unresolved)");
+        setUserLocationSource(`Global System Default (Geocoding API: ${lastStatus})`);
+        return;
       }
-    });
+
+      const queryStr = queries[attemptIndex];
+      geocoder.geocode({ address: queryStr }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK && results?.[0]?.geometry?.location) {
+          const loc = results[0].geometry.location;
+          const calculatedPos = { lat: loc.lat(), lng: loc.lng() };
+          setCoordinates(calculatedPos);
+          setUserLocationSource(`Location resolving via Profile Geocoding: ${results[0].formatted_address}`);
+        } else {
+          console.warn(`Geocode failed for: "${queryStr}". Status: ${status}. Falling back to next level...`);
+          attemptGeocode(attemptIndex + 1, status);
+        }
+      });
+    };
+
+    attemptGeocode(0);
   };
 
   // Run on mount to initialize location center
@@ -521,7 +554,7 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
           </div>
           <h2 className="text-lg font-black uppercase text-white tracking-wider">Google Maps API Key Missing</h2>
           <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Aegis requires a registered Google Cloud console key to activate spatial distance metrics, interactive maps, and authentic Place searches.
+            HealthSheild AI requires a registered Google Cloud console key to activate spatial distance metrics, interactive maps, and authentic Place searches.
           </p>
         </div>
 
@@ -598,7 +631,7 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
         </div>
         <div className="space-y-1">
           <p className="text-[11px] font-sans text-slate-400 leading-normal">
-            <strong className="text-amber-500">Disclaimer & Medical Safety Compliance:</strong> Aegis predictions are optimized for preventive analysis and do not replace professional diagnoses. Based on the predicted health risk, consulting a qualified healthcare professional may be beneficial. Nearby healthcare facilities are shown for your convenience and do not represent absolute recommendation endorsements.
+            <strong className="text-amber-500">Disclaimer & Medical Safety Compliance:</strong> HealthSheild AI predictions are optimized for preventive analysis and do not replace professional diagnoses. Based on the predicted health risk, consulting a qualified healthcare professional may be beneficial. Nearby healthcare facilities are shown for your convenience and do not represent absolute recommendation endorsements.
           </p>
         </div>
       </div>
@@ -650,36 +683,50 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
             <p className="text-[10px] text-slate-500">Configure geolocation sensors or calibrate standard physical coordinates below.</p>
           </div>
           
-          <button 
-            type="button"
-            onClick={triggerGpsLookup}
-            disabled={gpsLoading}
-            className="px-4 py-2 bg-neutral-900 border border-[#222] hover:border-emerald-500/30 text-xs font-extrabold rounded-lg uppercase text-white flex items-center gap-2 cursor-pointer transition-colors"
-          >
-            {gpsLoading ? <RefreshCw className="h-3 w-3 animate-spin text-emerald-400" /> : <Compass className="h-3 w-3 text-emerald-400 animate-pulse" />}
-            {gpsLoading ? "Syncing GPS..." : "Access My GPS Location"}
-          </button>
+          <div className="flex items-center gap-2 mt-3 sm:mt-0">
+
+            <button 
+              type="button"
+              onClick={triggerGpsLookup}
+              disabled={gpsLoading}
+              className="px-3 py-2 bg-neutral-900 border border-[#222] hover:border-emerald-500/30 text-[11px] font-extrabold rounded-lg uppercase text-white flex items-center gap-1.5 cursor-pointer transition-colors"
+            >
+              {gpsLoading ? <RefreshCw className="h-3 w-3 animate-spin text-emerald-400" /> : <Compass className="h-3 w-3 text-emerald-400 animate-pulse" />}
+              {gpsLoading ? "Syncing..." : "Use GPS"}
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
-          <div className="md:col-span-8 space-y-1.5">
-            <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Physical Demographics Address</label>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="space-y-1.5">
+            <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">House/Flat No</label>
             <input 
               type="text" 
-              value={manualAddress}
-              onChange={(e) => setManualAddress(e.target.value)}
-              placeholder="House, Street, City, State, Country, Postal Code"
+              value={manualHouse}
+              onChange={(e) => setManualHouse(e.target.value)}
+              placeholder="e.g. 4B"
               className="w-full bg-black border border-[#1E1E1E] focus:border-emerald-500/40 text-xs text-white px-3.5 py-2.5 rounded-xl outline-none"
             />
           </div>
-          <div className="md:col-span-4">
-            <button
-              type="button"
-              onClick={() => geocodeAddressFallback()}
-              className="w-full bg-[#111] hover:bg-[#161616] border border-[#222] text-xs font-extrabold py-2.5 rounded-xl uppercase transition-colors text-slate-300"
-            >
-              Geocode Profile Address
-            </button>
+          <div className="space-y-1.5">
+            <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Street Name/Area</label>
+            <input 
+              type="text" 
+              value={manualStreet}
+              onChange={(e) => setManualStreet(e.target.value)}
+              placeholder="e.g. 5th Main St"
+              className="w-full bg-black border border-[#1E1E1E] focus:border-emerald-500/40 text-xs text-white px-3.5 py-2.5 rounded-xl outline-none"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">City/Region</label>
+            <input 
+              type="text" 
+              value={manualArea}
+              onChange={(e) => setManualArea(e.target.value)}
+              placeholder="e.g. Chennai, TN"
+              className="w-full bg-black border border-[#1E1E1E] focus:border-emerald-500/40 text-xs text-white px-3.5 py-2.5 rounded-xl outline-none"
+            />
           </div>
         </div>
 
@@ -750,7 +797,7 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
               <RefreshCw className="h-7 w-7 text-emerald-400 animate-spin mx-auto" />
               <p className="text-[10px] text-slate-400 font-mono">Polling Google Places metadata for authentic results...</p>
             </div>
-          ) : error ? (
+          ) : hospitals.length === 0 && error ? (
             <div className="py-8 text-center bg-red-500/5 border border-red-500/10 rounded-2xl p-4">
               <AlertTriangle className="h-6 w-6 text-red-500 mx-auto mb-2 animate-bounce" />
               <p className="text-xs text-red-400">{error}</p>
@@ -760,7 +807,14 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
               No matching clinical structures found in local radius. Try adjusting location filters.
             </div>
           ) : (
-            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+            <div className="space-y-3">
+              {error && (
+                <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex gap-2 items-start text-left mb-2">
+                  <AlertTriangle className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-red-400 leading-tight">{error}</p>
+                </div>
+              )}
+              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
               {hospitals.map((h, i) => {
                 const isActive = activeHospital?.id === h.id;
                 const distanceVal = calculateDistanceKm(coordinates, h.location);
@@ -841,6 +895,7 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
                   </div>
                 );
               })}
+            </div>
             </div>
           )}
         </div>
