@@ -94,5 +94,29 @@
     "ip": "127.0.0.1",
     "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",
     "status": "success"
+  },
+  {
+    "id": "log_easrsr8ha",
+    "userId": "u_00dxc98nq",
+    "timestamp": "2026-06-17T18:10:42.788Z",
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",
+    "status": "success"
+  },
+  {
+    "id": "log_fvq2sbc03",
+    "userId": "u_00dxc98nq",
+    "timestamp": "2026-06-17T18:14:53.300Z",
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0",
+    "status": "success"
+  },
+  {
+    "id": "log_ykrb5xrbt",
+    "userId": "unknown_testuser",
+    "timestamp": "2026-06-17T18:20:24.190Z",
+    "ip": "127.0.0.1",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36",
+    "status": "failed"
   }
 ]

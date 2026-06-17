@@ -40,5 +40,19 @@
     "last_login": null,
     "is_active": true,
     "email_verified": true
+  },
+  {
+    "id": "u_4uks33ts0",
+    "fullName": "Test User",
+    "email": "testuser@example.com",
+    "userId": "testuser",
+    "hashed_password": "$2b$12$SSSAX/BN5N3SQaL2bQSt9eM3PXeQkBtKMYO0zwqATZt5JQhoaf9A.",
+    "phoneNumber": "+91 9876543210",
+    "address": "Apartment 4B || Gandhi Nagar || Chennai || Adyar || Tamil Nadu || India",
+    "created_at": "2026-06-17T18:23:13.427Z",
+    "updated_at": "2026-06-17T18:23:13.427Z",
+    "last_login": null,
+    "is_active": true,
+    "email_verified": true
   }
 ]

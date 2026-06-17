@@ -1,3 +1,4 @@
+import { t } from "i18next";
 import React, { useState } from "react";
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
 import { TrendingUp, Clock, AlertTriangle, Sparkles, Activity, ShieldCheck, Heart, Info } from "lucide-react";
@@ -21,12 +22,12 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
         <div className="mx-auto w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center animate-pulse">
           <Clock className="h-6 w-6" />
         </div>
-        <h3 className="text-sm font-black uppercase text-white tracking-wider">No Health Archive Records</h3>
-        <p className="text-xs text-slate-500 max-w-sm mx-auto">
-          Please log your health metrics to generate chronological timeline analytics graphs.
+        <h3 className="text-sm font-black uppercase text-white tracking-wider">{t("auto.no_health_archive_records", "No Health Archive Records")}</h3>
+        <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("auto.please_log_your_health_metrics_to_genera", "Please log your health metrics to generate chronological timeline analytics graphs.")}
+
         </p>
-      </div>
-    );
+      </div>);
+
   }
 
   // Build metrics for all historical records
@@ -41,15 +42,15 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
 
     const sleepDuration = parseFloat(lifestyle.sleepDuration) || 7;
     const sleepQuality = parseFloat(lifestyle.sleepQuality) || 3;
-    const sleepVal = Math.min(100, Math.round((sleepDuration / 8) * 70 + (sleepQuality / 5) * 30));
+    const sleepVal = Math.min(100, Math.round(sleepDuration / 8 * 70 + sleepQuality / 5 * 30));
 
     const stressLevel = parseFloat(lifestyle.stressLevel) || 5;
     const stressVal = Math.max(10, Math.round(100 - stressLevel * 9));
 
     const steps = rec.wearableDetails?.steps || 0;
-    const activityVal = steps > 0 
-      ? Math.min(100, Math.round((steps / 10000) * 100))
-      : (lifestyle.physicalActivity === "High" ? 90 : lifestyle.physicalActivity === "Moderate" ? 75 : lifestyle.physicalActivity === "Low" ? 50 : 30);
+    const activityVal = steps > 0 ?
+    Math.min(100, Math.round(steps / 10000 * 100)) :
+    lifestyle.physicalActivity === "High" ? 90 : lifestyle.physicalActivity === "Moderate" ? 75 : lifestyle.physicalActivity === "Low" ? 50 : 30;
 
     const junkFreq = parseFloat(nutrition.junkFood) || 5;
     const sugarFreq = parseFloat(nutrition.sugar) || 5;
@@ -68,7 +69,7 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
   });
 
   const toggleLine = (key: string) => {
-    setActiveLines(prev => ({ ...prev, [key]: !prev[key] }));
+    setActiveLines((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
   const getRecentAssessments = () => {
@@ -87,12 +88,12 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
       <div className="bg-gradient-to-r from-neutral-900 to-neutral-950 border border-[#1E1E1E] rounded-2xl p-5 flex items-center justify-between">
         <div className="space-y-1">
           <span className="text-[10px] text-teal-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-            <TrendingUp className="h-4.5 w-4.5 animate-pulse text-teal-500" />
-            Integrative Chronological Analytics Deck
+            <TrendingUp className="h-4.5 w-4.5 animate-pulse text-teal-500" />{t("auto.integrative_chronological_analytics_deck", "Integrative Chronological Analytics Deck")}
+
           </span>
-          <h2 className="text-xl font-black text-white uppercase tracking-tight">Timeline Analytics Tracking</h2>
-          <p className="text-xs text-slate-500 font-sans">
-            Cross-referencing multiple vital coordinates (Sleep, Stress, Nutrition, Workouts) over time.
+          <h2 className="text-xl font-black text-white uppercase tracking-tight">{t("auto.timeline_analytics_tracking", "Timeline Analytics Tracking")}</h2>
+          <p className="text-xs text-slate-500 font-sans">{t("auto.cross_referencing_multiple_vital_coordin", "Cross-referencing multiple vital coordinates (Sleep, Stress, Nutrition, Workouts) over time.")}
+
           </p>
         </div>
       </div>
@@ -103,34 +104,34 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
         <div className="lg:col-span-8 bg-[#0A0A0A] border border-[#1A1A1A] rounded-2xl p-6 space-y-4">
           <div className="flex justify-between items-center pb-2 border-b border-[#161616]">
             <div>
-              <h3 className="text-xs font-black uppercase text-white tracking-widest flex items-center gap-1">
-                Visual Analytics Plotter
+              <h3 className="text-xs font-black uppercase text-white tracking-widest flex items-center gap-1">{t("auto.visual_analytics_plotter", "Visual Analytics Plotter")}
+
               </h3>
-              <p className="text-[10px] text-slate-550">Click legend tags below to toggle specific line visibilities</p>
+              <p className="text-[10px] text-slate-550">{t("auto.click_legend_tags_below_to_toggle_specif", "Click legend tags below to toggle specific line visibilities")}</p>
             </div>
 
             {/* Manual Legend Switces */}
             <div className="flex flex-wrap gap-1.5">
               {[
-                { key: "healthScore", label: "Health Score", color: "#10b981" },
-                { key: "nutritionScore", label: "Nutrition", color: "#f59e0b" },
-                { key: "sleepScore", label: "Sleep", color: "#3b82f6" },
-                { key: "stressScore", label: "Stress Resilience", color: "#a855f7" },
-                { key: "activityScore", label: "Activity", color: "#14b8a6" }
-              ].map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => toggleLine(item.key)}
-                  className={`text-[9px] px-2.5 py-1.5 rounded-lg border font-mono font-bold transition-all cursor-pointer ${
-                    activeLines[item.key]
-                      ? "bg-slate-900 text-white"
-                      : "bg-[#050505] text-slate-600 border-transparent opacity-40 hover:opacity-75"
-                  }`}
-                  style={{ borderLeftColor: activeLines[item.key] ? item.color : "transparent", borderWidth: activeLines[item.key] ? "2px" : "1px" }}
-                >
+              { key: "healthScore", label: "Health Score", color: "#10b981" },
+              { key: "nutritionScore", label: "Nutrition", color: "#f59e0b" },
+              { key: "sleepScore", label: "Sleep", color: "#3b82f6" },
+              { key: "stressScore", label: "Stress Resilience", color: "#a855f7" },
+              { key: "activityScore", label: "Activity", color: "#14b8a6" }].
+              map((item) =>
+              <button
+                key={item.key}
+                onClick={() => toggleLine(item.key)}
+                className={`text-[9px] px-2.5 py-1.5 rounded-lg border font-mono font-bold transition-all cursor-pointer ${
+                activeLines[item.key] ?
+                "bg-slate-900 text-white" :
+                "bg-[#050505] text-slate-600 border-transparent opacity-40 hover:opacity-75"}`
+                }
+                style={{ borderLeftColor: activeLines[item.key] ? item.color : "transparent", borderWidth: activeLines[item.key] ? "2px" : "1px" }}>
+                
                   {item.label}
                 </button>
-              ))}
+              )}
             </div>
           </div>
 
@@ -140,10 +141,10 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
                 <CartesianGrid strokeDasharray="3 3" stroke="#151515" />
                 <XAxis dataKey="name" stroke="#444" />
                 <YAxis stroke="#444" domain={[20, 100]} />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: "#0C0C0C", borderColor: "#222", borderRadius: "8px" }}
-                  labelStyle={{ color: "#888" }}
-                />
+                  labelStyle={{ color: "#888" }} />
+                
                 
                 {activeLines.healthScore && <Line type="monotone" dataKey="healthScore" stroke="#10b981" strokeWidth={2.5} dot={{ r: 4 }} />}
                 {activeLines.nutritionScore && <Line type="monotone" dataKey="nutritionScore" stroke="#f59e0b" strokeWidth={2} dot={{ r: 4 }} />}
@@ -162,71 +163,71 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
               <AlertTriangle className="h-4.5 w-4.5 text-rose-500" />
             </div>
             <div>
-              <h3 className="text-xs font-black uppercase text-white tracking-widest leading-tight">Early Warning Signals</h3>
-              <p className="text-[10px] text-slate-550 mt-0.5">Automated detection of physiological parameter deviations.</p>
+              <h3 className="text-xs font-black uppercase text-white tracking-widest leading-tight">{t("auto.early_warning_signals", "Early Warning Signals")}</h3>
+              <p className="text-[10px] text-slate-550 mt-0.5">{t("auto.automated_detection_of_physiological_par", "Automated detection of physiological parameter deviations.")}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             
             {/* Real-time calculated health trend */}
-            {trendRef ? (
-              <div className="bg-[#050505] border border-[#1C1C1C] rounded-xl p-4.5 space-y-3">
-                <span className="text-[9px] text-[#A0A0A0] font-black uppercase tracking-wider block font-mono">
-                  Trending Analysis (Session Delta)
-                </span>
+            {trendRef ?
+            <div className="bg-[#050505] border border-[#1C1C1C] rounded-xl p-4.5 space-y-3">
+                <span className="text-[9px] text-[#A0A0A0] font-black uppercase tracking-wider block font-mono">{t("auto.trending_analysis_session_delta", "Trending Analysis (Session Delta)")}
+
+              </span>
                 
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-400">Health Balance Variance:</span>
+                    <span className="text-slate-400">{t("auto.health_balance_variance", "Health Balance Variance:")}</span>
                     <span className={`font-mono font-bold ${trendRef.latest.healthScore >= trendRef.prev.healthScore ? "text-emerald-400" : "text-rose-450"}`}>
                       {trendRef.latest.healthScore >= trendRef.prev.healthScore ? "▲" : "▼"}{" "}
-                      {Math.abs(trendRef.latest.healthScore - trendRef.prev.healthScore)} pts
-                    </span>
+                      {Math.abs(trendRef.latest.healthScore - trendRef.prev.healthScore)}{t("auto.pts", "pts")}
+                  </span>
                   </div>
 
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-400">Allostatic Stress Shift:</span>
+                    <span className="text-slate-400">{t("auto.allostatic_stress_shift", "Allostatic Stress Shift:")}</span>
                     <span className={`font-mono font-bold ${trendRef.latest.stressScore >= trendRef.prev.stressScore ? "text-emerald-400" : "text-orange-450"}`}>
                       {trendRef.latest.stressScore >= trendRef.prev.stressScore ? "▲" : "▼"}{" "}
-                      {Math.abs(trendRef.latest.stressScore - trendRef.prev.stressScore)} pts
-                    </span>
+                      {Math.abs(trendRef.latest.stressScore - trendRef.prev.stressScore)}{t("auto.pts", "pts")}
+                  </span>
                   </div>
 
                   <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-400">Nutrition Score Variance:</span>
+                    <span className="text-slate-400">{t("auto.nutrition_score_variance", "Nutrition Score Variance:")}</span>
                     <span className={`font-mono font-bold ${trendRef.latest.nutritionScore >= trendRef.prev.nutritionScore ? "text-emerald-400" : "text-orange-450"}`}>
                       {trendRef.latest.nutritionScore >= trendRef.prev.nutritionScore ? "▲" : "▼"}{" "}
-                      {Math.abs(trendRef.latest.nutritionScore - trendRef.prev.nutritionScore)} pts
-                    </span>
+                      {Math.abs(trendRef.latest.nutritionScore - trendRef.prev.nutritionScore)}{t("auto.pts", "pts")}
+                  </span>
                   </div>
                 </div>
 
                 <div className="pt-2 border-t border-[#121212] text-[10px] text-slate-500 leading-normal flex gap-1.5 items-start">
                   <Info className="h-3.5 w-3.5 text-[#f59e0b] shrink-0 mt-0.5" />
                   <span>
-                    {trendRef.latest.healthScore < 70 
-                      ? "⚠️ Moderate compensation noticed. We recommend physical aerobic workouts immediately."
-                      : "🌿 Steady circadian balance. Continue active hydration targets and low glycemic dietary intake."}
+                    {trendRef.latest.healthScore < 70 ?
+                  "⚠️ Moderate compensation noticed. We recommend physical aerobic workouts immediately." :
+                  "🌿 Steady circadian balance. Continue active hydration targets and low glycemic dietary intake."}
                   </span>
                 </div>
-              </div>
-            ) : (
-              <div className="p-5 border border-dashed border-[#1C1C1C] rounded-xl text-center text-slate-600 text-xs font-semibold">
-                Waiting on a second health log to execute dynamic trend variance computations.
-              </div>
-            )}
+              </div> :
+
+            <div className="p-5 border border-dashed border-[#1C1C1C] rounded-xl text-center text-slate-600 text-xs font-semibold">{t("auto.waiting_on_a_second_health_log_to_execut", "Waiting on a second health log to execute dynamic trend variance computations.")}
+
+            </div>
+            }
 
             {/* Static early Warning guidelines */}
             <div className="bg-[#050505] border border-[#161616] p-4.5 rounded-xl space-y-2">
               <span className="text-[10px] font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-                <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
-                Vulnerability Reference Points
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />{t("auto.vulnerability_reference_points", "Vulnerability Reference Points")}
+
               </span>
               <ul className="space-y-1.5 text-[10px] text-slate-400 leading-relaxed list-disc list-inside">
-                <li><strong className="text-slate-300">Stress Balance &lt; 50:</strong> Over-activates blood cortisol, raising arteriole blood pressure and vascular stiffness.</li>
-                <li><strong className="text-slate-300">Sleep Duration &lt; 6h:</strong> Impairs insulin clearance efficiency by 30-40% due to cellular wear.</li>
-                <li><strong className="text-slate-300">Hydration &lt; 1.5L:</strong> Limits oxygen blood density, creating elevated resting pulse curves.</li>
+                <li><strong className="text-slate-300">{t("auto.stress_balance_50", "Stress Balance < 50:")}</strong>{t("auto.over_activates_blood_cortisol_raising_ar", "Over-activates blood cortisol, raising arteriole blood pressure and vascular stiffness.")}</li>
+                <li><strong className="text-slate-300">{t("auto.sleep_duration_6h", "Sleep Duration < 6h:")}</strong>{t("auto.impairs_insulin_clearance_efficiency_by", "Impairs insulin clearance efficiency by 30-40% due to cellular wear.")}</li>
+                <li><strong className="text-slate-300">{t("auto.hydration_1_5l", "Hydration < 1.5L:")}</strong>{t("auto.limits_oxygen_blood_density_creating_ele", "Limits oxygen blood density, creating elevated resting pulse curves.")}</li>
               </ul>
             </div>
 
@@ -235,6 +236,6 @@ export default function TimelineAnalyticsPage({ timelineRecords }: TimelineAnaly
 
       </div>
 
-    </div>
-  );
+    </div>);
+
 }

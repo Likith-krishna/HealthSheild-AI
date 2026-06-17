@@ -1,11 +1,12 @@
+import { t } from "i18next";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PredictionEngineOutput } from "../types";
-import { 
-  Heart, Brain, Activity, Sliders, Sparkles, TrendingUp, TrendingDown, Info, AlertTriangle, 
+import {
+  Heart, Brain, Activity, Sliders, Sparkles, TrendingUp, TrendingDown, Info, AlertTriangle,
   CheckCircle, ChevronRight, BookOpen, ShieldCheck, Zap, ToggleLeft, RefreshCw, Eye, ShieldAlert,
-  HelpCircle, Apple, Clock, Weight, Flame
-} from "lucide-react";
+  HelpCircle, Apple, Clock, Weight, Flame } from
+"lucide-react";
 import { User } from "../lib/api";
 
 interface HealthRiskHeatmapProps {
@@ -34,12 +35,12 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
         <div className="mx-auto w-12 h-12 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center animate-pulse">
           <ShieldAlert className="h-6 w-6" />
         </div>
-        <h3 className="text-sm font-black uppercase text-white tracking-wider">No Active Bio-Twin Analysis Sync Case</h3>
-        <p className="text-xs text-slate-500 max-w-sm mx-auto">
-          Please input your baseline metabolic biomarkers inside the "Health Data Input" page to assemble your first Interactive heatmapping twin.
+        <h3 className="text-sm font-black uppercase text-white tracking-wider">{t("auto.no_active_bio_twin_analysis_sync_case", "No Active Bio-Twin Analysis Sync Case")}</h3>
+        <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("auto.please_input_your_baseline_metabolic_bio", "Please input your baseline metabolic biomarkers inside the \"Health Data Input\" page to assemble your first Interactive heatmapping twin.")}
+
         </p>
-      </div>
-    );
+      </div>);
+
   }
 
   // --- Baseline state derivation ---
@@ -103,7 +104,7 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
       setSimAlcohol("Heavy");
     } else if (type === "healthy") {
       // Ideal target weight (BMI ~21.5)
-      const idealWt = Math.round(21.5 * ((baselineHeight / 100) * (baselineHeight / 100)));
+      const idealWt = Math.round(21.5 * (baselineHeight / 100 * (baselineHeight / 100)));
       setSimWeight(Math.min(baselineWeight, idealWt > 45 ? idealWt : 65));
       setSimExercise(5);
       setSimSleep(8);
@@ -116,12 +117,12 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
 
   // --- Dynamic Model Calculations ---
   // Core disease baseline risks from the AI prediction engine
-  const predDiabetes = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("diabetes"))?.probability || 48);
-  const predHeart = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("heart"))?.probability || 34);
-  const predHypertension = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("hypertension"))?.probability || 42);
-  const predKidney = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("kidney"))?.probability || 25);
-  const predStroke = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("stroke"))?.probability || 28);
-  const predRespiratory = Math.round(evaluation.predictions?.find(p => p.name.toLowerCase().includes("respiratory") || p.name.toLowerCase().includes("asthma") || p.name.toLowerCase().includes("pulmonary"))?.probability || 22);
+  const predDiabetes = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("diabetes"))?.probability || 48);
+  const predHeart = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("heart"))?.probability || 34);
+  const predHypertension = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("hypertension"))?.probability || 42);
+  const predKidney = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("kidney"))?.probability || 25);
+  const predStroke = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("stroke"))?.probability || 28);
+  const predRespiratory = Math.round(evaluation.predictions?.find((p) => p.name.toLowerCase().includes("respiratory") || p.name.toLowerCase().includes("asthma") || p.name.toLowerCase().includes("pulmonary"))?.probability || 22);
 
   const calculateOrganRisks = () => {
     // Calculators mapped according to clinical weights requested
@@ -135,16 +136,16 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
 
     // A factor describing user general biometric condition
     let metabolicLifestyleScoreModifier = 0;
-    
+
     // Weight deviation impact
-    metabolicLifestyleScoreModifier -= (wtChange * -1.2); // Gaining weight worsens risks
+    metabolicLifestyleScoreModifier -= wtChange * -1.2; // Gaining weight worsens risks
     // Exercise impact
-    metabolicLifestyleScoreModifier -= (exChange * 3); // More exercise reduces risks
+    metabolicLifestyleScoreModifier -= exChange * 3; // More exercise reduces risks
     // Stress impact
-    metabolicLifestyleScoreModifier -= (stChange * 2);
+    metabolicLifestyleScoreModifier -= stChange * 2;
 
     // Dynamic organ scores
-    
+
     // HEART RISK
     // Baseline = heart disease*0.5 + hypertension*0.3 + (totalCholesterolTotal normalized)*0.2
     const baseChol = parseFloat(basicInfo.cholesterolTotal || "190") || 190;
@@ -183,7 +184,7 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
     // Baseline = Fatty liver/weight factor + alcohol factor
     const baseBMI = baseWeightToBmi(baselineWeight);
     const bmiFactor = Math.min(100, Math.max(0, (baseBMI - 20) * 4.5));
-    let liverBase = bmiFactor * 0.4 + (baselineAlcohol === "Heavy" ? 50 : baselineAlcohol === "Social" ? 20 : 5) + (predDiabetes * 0.2);
+    let liverBase = bmiFactor * 0.4 + (baselineAlcohol === "Heavy" ? 50 : baselineAlcohol === "Social" ? 20 : 5) + predDiabetes * 0.2;
     let liverRisk = liverBase + (simWeight - baselineWeight) * 1.6 + (simAlcohol === "Heavy" ? 25 : simAlcohol === "Social" ? 8 : -10) - (simExercise - baselineExercise) * 2;
     // Cap to ensure it fits predictions elegantly
     liverRisk = Math.min(99, Math.max(5, Math.round(liverRisk)));
@@ -232,7 +233,7 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
   // Helper and calculations
   function baseWeightToBmi(wt: number) {
     if (baselineHeight <= 0) return 24.2;
-    return wt / ((baselineHeight / 100) * (baselineHeight / 100));
+    return wt / (baselineHeight / 100 * (baselineHeight / 100));
   }
 
   // Map score value to color indicators
@@ -255,7 +256,7 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
       pancreas: Math.min(99, Math.max(5, Math.round(predDiabetes))),
       kidney: Math.min(99, Math.max(5, Math.round(predKidney * 0.5 + predDiabetes * 0.3 + predHypertension * 0.2)))
     };
-    
+
     // Simulate past month score as slightly different
     const lastMonth = Math.min(99, Math.max(5, Math.round(baselineLookup[id] + (id === "heart" ? 4 : id === "kidney" ? -6 : id === "lungs" ? 2 : -3))));
 
@@ -268,16 +269,16 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "Responsible for cognitive reserves, neurological pathways, and allostatic stress regulation.",
           contributingFactors: [
-            simStress > 6 ? "Elevated Neural Cortisol (Chronic Stress Index)" : "Baseline Stress Adaptation",
-            predStroke > 60 ? "Unstable Carotid Occlusion Prediction Profile" : "Stabilized Carotid Flow",
-            predHypertension > 60 ? "Hydrostatic Hypertension Vessel Demands" : "Mild Arterial Pressure Load",
-            simSleep < 6 ? "Suboptimal Glymphatic Clearance (Restricted Sleep)" : "Balanced Cognitive Regeneration Cycles"
-          ].filter(Boolean),
+          simStress > 6 ? "Elevated Neural Cortisol (Chronic Stress Index)" : "Baseline Stress Adaptation",
+          predStroke > 60 ? "Unstable Carotid Occlusion Prediction Profile" : "Stabilized Carotid Flow",
+          predHypertension > 60 ? "Hydrostatic Hypertension Vessel Demands" : "Mild Arterial Pressure Load",
+          simSleep < 6 ? "Suboptimal Glymphatic Clearance (Restricted Sleep)" : "Balanced Cognitive Regeneration Cycles"].
+          filter(Boolean),
           recommendations: [
-            "Perform 12 minutes of box-breathing exercises during active stress cycles.",
-            "Establish strict circadian habits aiming for 7.5+ sleep hours nightly.",
-            "Incorporate dark berry anthocyanins to bolster endothelial health."
-          ],
+          "Perform 12 minutes of box-breathing exercises during active stress cycles.",
+          "Establish strict circadian habits aiming for 7.5+ sleep hours nightly.",
+          "Incorporate dark berry anthocyanins to bolster endothelial health."],
+
           lastMonthScore: lastMonth
         };
       case "heart":
@@ -288,16 +289,16 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "Controls systemic circulatory rate, arterial elasticity, and muscular wall resistance.",
           contributingFactors: [
-            predHeart > 60 ? "High Cardiac Inotropic Resistance Indicator" : "Standard Cardiovascular Profile",
-            simExercise < 2 ? "Low Sarcoplasmic Cardioprotective Reserve" : "Robust Endothelial Capillary Density",
-            simWeight > baselineWeight ? "Increased Visceral Vascular Peripheral Resistance" : "Reduced Circulatory Friction Factor",
-            simSmoking === "Active" ? "Nicotine-Induced Coronary Microspasm Cycle" : "Absence of Active Tobacco Toxins"
-          ],
+          predHeart > 60 ? "High Cardiac Inotropic Resistance Indicator" : "Standard Cardiovascular Profile",
+          simExercise < 2 ? "Low Sarcoplasmic Cardioprotective Reserve" : "Robust Endothelial Capillary Density",
+          simWeight > baselineWeight ? "Increased Visceral Vascular Peripheral Resistance" : "Reduced Circulatory Friction Factor",
+          simSmoking === "Active" ? "Nicotine-Induced Coronary Microspasm Cycle" : "Absence of Active Tobacco Toxins"],
+
           recommendations: [
-            "Engage in Zone 2 low-intensity cardiovascular training 150 minutes weekly.",
-            "Reduce refined sodium chloride intake below 1,600mg daily to ease hydrostatic tension.",
-            "Utilize Omega-3 fatty acids (EPA/DHA) to stabilize cellular membrane plaque triggers."
-          ],
+          "Engage in Zone 2 low-intensity cardiovascular training 150 minutes weekly.",
+          "Reduce refined sodium chloride intake below 1,600mg daily to ease hydrostatic tension.",
+          "Utilize Omega-3 fatty acids (EPA/DHA) to stabilize cellular membrane plaque triggers."],
+
           lastMonthScore: lastMonth
         };
       case "lungs":
@@ -308,15 +309,15 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "Mediates alveoli oxygen-carbon dioxide transfer and guards systemic tissue oxygenation.",
           contributingFactors: [
-            simSmoking === "Active" ? "Severe Carbon Monoxide Alveoli Damage" : simSmoking === "Former" ? "Partial Nicotine Fiber Remodeling" : "Pristine Respiratory Linings",
-            predRespiratory > 50 ? "Bronchopulmonary Inflammatory Sensitivity" : "Normal Mucosal Clearance",
-            simExercise < 3 ? "Restricted Peak Vo2 Max Thoracic Expansion" : "Enhanced Aerobic Capillary Capacity"
-          ],
+          simSmoking === "Active" ? "Severe Carbon Monoxide Alveoli Damage" : simSmoking === "Former" ? "Partial Nicotine Fiber Remodeling" : "Pristine Respiratory Linings",
+          predRespiratory > 50 ? "Bronchopulmonary Inflammatory Sensitivity" : "Normal Mucosal Clearance",
+          simExercise < 3 ? "Restricted Peak Vo2 Max Thoracic Expansion" : "Enhanced Aerobic Capillary Capacity"],
+
           recommendations: [
-            "Maintain total cessation of tobacco or vape vaporizers to trigger alveolar macro-phage clearance.",
-            "Do diaphragmatic breathing sessions once in the morning to optimize thoracic compliance.",
-            "Install HEPA filters in residential workspace quarters to reduce particulate matter load."
-          ],
+          "Maintain total cessation of tobacco or vape vaporizers to trigger alveolar macro-phage clearance.",
+          "Do diaphragmatic breathing sessions once in the morning to optimize thoracic compliance.",
+          "Install HEPA filters in residential workspace quarters to reduce particulate matter load."],
+
           lastMonthScore: lastMonth
         };
       case "liver":
@@ -327,15 +328,15 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "In charge of metabolic detoxification, lipoprotein packaging, and glycogen storage buffers.",
           contributingFactors: [
-            baseWeightToBmi(simWeight) > 27.5 ? "Hepatic Adipose Accumulation Index (Fatty Liver Triggers)" : "Healthy Hepatic Lobule Reserves",
-            simAlcohol === "Heavy" ? "Acetaldehyde Lipogenesis Strain" : simAlcohol === "Social" ? "Intermittent Oxidative Stress Load" : "Absence of Ethanol Toxin Inputs",
-            predDiabetes > 60 ? "Elevated Portal Gluconeogenesis (Insulin Resistance)" : "Stable Insulin-Mediated Liver Metabolism"
-          ],
+          baseWeightToBmi(simWeight) > 27.5 ? "Hepatic Adipose Accumulation Index (Fatty Liver Triggers)" : "Healthy Hepatic Lobule Reserves",
+          simAlcohol === "Heavy" ? "Acetaldehyde Lipogenesis Strain" : simAlcohol === "Social" ? "Intermittent Oxidative Stress Load" : "Absence of Ethanol Toxin Inputs",
+          predDiabetes > 60 ? "Elevated Portal Gluconeogenesis (Insulin Resistance)" : "Stable Insulin-Mediated Liver Metabolism"],
+
           recommendations: [
-            "Prioritize cruciferous vegetables (broccoli, Brussels sprouts) to assist Cytochrome P450 pathways.",
-            "Eliminate added high-fructose corn syrups to deter de novo hepatic lipogenesis.",
-            "Implement a minimum 12-hour overnight digestive fast to permit hepatocyte clearance."
-          ],
+          "Prioritize cruciferous vegetables (broccoli, Brussels sprouts) to assist Cytochrome P450 pathways.",
+          "Eliminate added high-fructose corn syrups to deter de novo hepatic lipogenesis.",
+          "Implement a minimum 12-hour overnight digestive fast to permit hepatocyte clearance."],
+
           lastMonthScore: lastMonth
         };
       case "pancreas":
@@ -346,19 +347,19 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "Synthesizes insulin and glucagon from Islets of Langerhans to balance systemic blood sugar.",
           contributingFactors: [
-            predDiabetes > 60 ? "Desensitized Glut-4 Skeletal Receptor Signalling" : "Excellent Beta-Cell Capacity",
-            simWeight > baselineWeight ? "Visceral Fat Inflammatory Cytokine Stress on Beta-Cells" : "Reduced Pancreatic Ectopic Fat Accumulation",
-            simExercise > 4 ? "Skeletal Muscle Glycogen Depletion (Dynamic Glucose Sinks)" : "Inadequate Postprandial Skeletal Glucose Sink Capacity"
-          ],
+          predDiabetes > 60 ? "Desensitized Glut-4 Skeletal Receptor Signalling" : "Excellent Beta-Cell Capacity",
+          simWeight > baselineWeight ? "Visceral Fat Inflammatory Cytokine Stress on Beta-Cells" : "Reduced Pancreatic Ectopic Fat Accumulation",
+          simExercise > 4 ? "Skeletal Muscle Glycogen Depletion (Dynamic Glucose Sinks)" : "Inadequate Postprandial Skeletal Glucose Sink Capacity"],
+
           recommendations: [
-            "Incorporate brief 10-minute incline walks immediately post-meal to blunt glycemic excursions.",
-            "Consume soluble fiber (chia seeds, psyllium husk) prior to carbohydrate intake.",
-            "Optimize systemic magnesium intake (glycinate or l-threonate) to restore insulin receptor accuracy."
-          ],
+          "Incorporate brief 10-minute incline walks immediately post-meal to blunt glycemic excursions.",
+          "Consume soluble fiber (chia seeds, psyllium husk) prior to carbohydrate intake.",
+          "Optimize systemic magnesium intake (glycinate or l-threonate) to restore insulin receptor accuracy."],
+
           lastMonthScore: lastMonth
         };
       case "kidneys":
-        default:
+      default:
         return {
           id: "kidneys",
           name: "Kidneys / Renal Filter",
@@ -366,16 +367,16 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           category: currentStatus.category,
           description: "Filters cellular toxic residues, maintains osmotic electrolyte balance, and controls blood volume.",
           contributingFactors: [
-            predKidney > 50 ? "Reduced Glomerular Filtration Capacity Risk" : "Intact Glomerular Membrane Status",
-            simWater < 1.5 ? "High Tubule Concentration Stress (Suboptimal Hydration)" : "Excellent Osmotic Fluid Passage Rates",
-            predHypertension > 60 ? "High Intraglomerular Pressure Shear Stress" : "Balanced Renal Vessel Pressures",
-            predDiabetes > 65 ? "Glycation End-Products Nephron Occlusion" : "Normal Capillary Sieve Flow"
-          ],
+          predKidney > 50 ? "Reduced Glomerular Filtration Capacity Risk" : "Intact Glomerular Membrane Status",
+          simWater < 1.5 ? "High Tubule Concentration Stress (Suboptimal Hydration)" : "Excellent Osmotic Fluid Passage Rates",
+          predHypertension > 60 ? "High Intraglomerular Pressure Shear Stress" : "Balanced Renal Vessel Pressures",
+          predDiabetes > 65 ? "Glycation End-Products Nephron Occlusion" : "Normal Capillary Sieve Flow"],
+
           recommendations: [
-            "Achieve consistent hydration intake of 2.8L to 3.5L pure filtered water daily.",
-            "Strictly avoid NSAID pain relievers (ibuprofen) which restrict protective renal afferent artery blood flow.",
-            "Ensure low postprandial glycemic peaks to diminish glycation damage inside fragile glomeruli filters."
-          ],
+          "Achieve consistent hydration intake of 2.8L to 3.5L pure filtered water daily.",
+          "Strictly avoid NSAID pain relievers (ibuprofen) which restrict protective renal afferent artery blood flow.",
+          "Ensure low postprandial glycemic peaks to diminish glycation damage inside fragile glomeruli filters."],
+
           lastMonthScore: lastMonth
         };
     }
@@ -403,13 +404,13 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
 
   // Map coordinate nodes on the visual diagram
   const ORGANS_LIST = [
-    { id: "brain", label: "Brain", y: "7%", x: "50%", icon: Brain },
-    { id: "lungs", label: "Lungs", y: "30%", x: "50%", icon: Activity },
-    { id: "heart", label: "Heart", y: "34%", x: "44%", icon: Heart },
-    { id: "liver", label: "Liver", y: "42%", x: "42%", icon: Flame },
-    { id: "pancreas", label: "Pancreas", y: "45%", x: "50%", icon: Apple },
-    { id: "kidneys", label: "Kidneys", y: "51%", x: "50%", icon: Sliders }
-  ];
+  { id: "brain", label: "Brain", y: "7%", x: "50%", icon: Brain },
+  { id: "lungs", label: "Lungs", y: "30%", x: "50%", icon: Activity },
+  { id: "heart", label: "Heart", y: "34%", x: "44%", icon: Heart },
+  { id: "liver", label: "Liver", y: "42%", x: "42%", icon: Flame },
+  { id: "pancreas", label: "Pancreas", y: "45%", x: "50%", icon: Apple },
+  { id: "kidneys", label: "Kidneys", y: "51%", x: "50%", icon: Sliders }];
+
 
   return (
     <div className="space-y-6">
@@ -420,13 +421,13 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-1">
             <div className="text-[10px] text-emerald-400 font-extrabold tracking-widest uppercase font-mono flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 animate-spin-slow" /> Advanced Body Mapping Interface
+              <Sparkles className="h-4 w-4 animate-spin-slow" />{t("auto.advanced_body_mapping_interface", "Advanced Body Mapping Interface")}
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Health Risk Heatmap
+            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">{t("auto.health_risk_heatmap", "Health Risk Heatmap")}
+
             </h2>
-            <p className="text-xs text-slate-400 italic">
-              "See your health. Understand your risks. Protect your future."
+            <p className="text-xs text-slate-400 italic">{t("auto.see_your_health_understand_your_risks_p", "\"See your health. Understand your risks. Protect your future.\"")}
+
             </p>
           </div>
           
@@ -435,32 +436,32 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
             <button
               onClick={() => setProjectionMode("current")}
               className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-[10px] font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer ${
-                projectionMode === "current"
-                  ? "bg-emerald-500 text-black shadow-md"
-                  : "text-slate-400 hover:text-white bg-transparent"
-              }`}
-            >
-              Current State
+              projectionMode === "current" ?
+              "bg-emerald-500 text-black shadow-md" :
+              "text-slate-400 hover:text-white bg-transparent"}`
+              }>{t("auto.current_state", "Current State")}
+
+
             </button>
             <button
               onClick={() => setProjectionMode("future_no_change")}
               className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-[10px] font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer ${
-                projectionMode === "future_no_change"
-                  ? "bg-red-500/20 text-red-100 border border-red-500/30"
-                  : "text-slate-400 hover:text-white bg-transparent"
-              }`}
-            >
-              10-Yr Trend (Standard)
+              projectionMode === "future_no_change" ?
+              "bg-red-500/20 text-red-100 border border-red-500/30" :
+              "text-slate-400 hover:text-white bg-transparent"}`
+              }>{t("auto.10_yr_trend_standard", "10-Yr Trend (Standard)")}
+
+
             </button>
             <button
               onClick={() => setProjectionMode("future_optimized")}
               className={`flex-1 sm:flex-initial px-3.5 py-1.5 rounded-lg text-[10px] font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer ${
-                projectionMode === "future_optimized"
-                  ? "bg-teal-500/20 text-teal-100 border border-teal-500/30"
-                  : "text-slate-400 hover:text-white bg-transparent"
-              }`}
-            >
-              10-Yr Optimized Path
+              projectionMode === "future_optimized" ?
+              "bg-teal-500/20 text-teal-100 border border-teal-500/30" :
+              "text-slate-400 hover:text-white bg-transparent"}`
+              }>{t("auto.10_yr_optimized_path", "10-Yr Optimized Path")}
+
+
             </button>
           </div>
         </div>
@@ -474,40 +475,40 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           <div className="space-y-4">
             <div className="pb-3 border-b border-zinc-900 flex justify-between items-center">
               <div>
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">Interactive Panel</span>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-mono">{t("auto.interactive_panel", "Interactive Panel")}</span>
                 <h3 className="text-xs font-black text-white uppercase tracking-wider flex items-center gap-1.5">
-                  <Sliders className="h-4 w-4 text-emerald-400" /> Life-Habit Simulator
+                  <Sliders className="h-4 w-4 text-emerald-400" />{t("auto.life_habit_simulator", "Life-Habit Simulator")}
                 </h3>
               </div>
-              <span className="text-[9px] font-bold text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-900/40">
-                REAL-TIME COUPLING
+              <span className="text-[9px] font-bold text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-900/40">{t("auto.real_time_coupling", "REAL-TIME COUPLING")}
+
               </span>
             </div>
 
             {/* Presets controller */}
             <div className="space-y-2">
-              <span className="text-[10px] text-slate-400 font-bold block">Apply Scenario Presets:</span>
+              <span className="text-[10px] text-slate-400 font-bold block">{t("auto.apply_scenario_presets", "Apply Scenario Presets:")}</span>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => applyPreset("baseline")}
-                  className="bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 text-slate-300 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
-                >
-                  <RefreshCw className="h-3 w-3 text-slate-500" /> Baseline
+                  className="bg-zinc-950 hover:bg-zinc-900 border border-zinc-800 text-slate-300 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1">
+                  
+                  <RefreshCw className="h-3 w-3 text-slate-500" />{t("auto.baseline", "Baseline")}
                 </button>
                 <button
                   type="button"
                   onClick={() => applyPreset("unhealthy")}
-                  className="bg-red-950/20 hover:bg-red-950/30 border border-red-900/30 text-red-200 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
-                >
-                  <ShieldAlert className="h-3 w-3 text-red-500" /> Sedentary stress
+                  className="bg-red-950/20 hover:bg-red-950/30 border border-red-900/30 text-red-200 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1">
+                  
+                  <ShieldAlert className="h-3 w-3 text-red-500" />{t("auto.sedentary_stress", "Sedentary stress")}
                 </button>
                 <button
                   type="button"
                   onClick={() => applyPreset("healthy")}
-                  className="bg-emerald-950/20 hover:bg-emerald-950/30 border border-emerald-900/30 text-emerald-200 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1"
-                >
-                  <ShieldCheck className="h-3 w-3 text-emerald-500" /> Super regimen
+                  className="bg-emerald-950/20 hover:bg-emerald-950/30 border border-emerald-900/30 text-emerald-200 rounded-lg py-1.5 text-[9px] uppercase font-bold transition-all cursor-pointer flex items-center justify-center gap-1">
+                  
+                  <ShieldCheck className="h-3 w-3 text-emerald-500" />{t("auto.super_regimen", "Super regimen")}
                 </button>
               </div>
             </div>
@@ -519,10 +520,10 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-350 font-bold font-sans flex items-center gap-1.5 text-[11px]">
-                    <Weight className="h-3.5 w-3.5 text-slate-500" /> Body Mass Weight
+                    <Weight className="h-3.5 w-3.5 text-slate-500" />{t("auto.body_mass_weight", "Body Mass Weight")}
                   </span>
                   <span className="font-mono text-white text-[11px] font-bold">
-                    {simWeight.toFixed(1)} kg <span className="text-slate-500 text-[10px]">({baseWeightToBmi(simWeight).toFixed(1)} BMI)</span>
+                    {simWeight.toFixed(1)}{t("auto.kg", "kg")}<span className="text-slate-500 text-[10px]">({baseWeightToBmi(simWeight).toFixed(1)}{t("auto.bmi", "BMI)")}</span>
                   </span>
                 </div>
                 <input
@@ -532,15 +533,15 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                   step="0.5"
                   value={simWeight}
                   onChange={(e) => setSimWeight(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer"
-                />
+                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer" />
+                
               </div>
 
               {/* Stress Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-350 font-bold font-sans flex items-center gap-1.5 text-[11px]">
-                    <Zap className="h-3.5 w-3.5 text-slate-500" /> Neural Distress Index
+                    <Zap className="h-3.5 w-3.5 text-slate-500" />{t("auto.neural_distress_index", "Neural Distress Index")}
                   </span>
                   <span className="font-mono text-white text-[11px] font-bold">
                     {simStress} / 10
@@ -552,18 +553,18 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                   max="10"
                   value={simStress}
                   onChange={(e) => setSimStress(parseInt(e.target.value))}
-                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer"
-                />
+                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer" />
+                
               </div>
 
               {/* Exercise Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-350 font-bold font-sans flex items-center gap-1.5 text-[11px]">
-                    <Flame className="h-3.5 w-3.5 text-slate-500" /> Physical Activation Target
+                    <Flame className="h-3.5 w-3.5 text-slate-500" />{t("auto.physical_activation_target", "Physical Activation Target")}
                   </span>
                   <span className="font-mono text-white text-[11px] font-bold">
-                    {simExercise} days/wk
+                    {simExercise}{t("auto.days_wk", "days/wk")}
                   </span>
                 </div>
                 <input
@@ -572,18 +573,18 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                   max="7"
                   value={simExercise}
                   onChange={(e) => setSimExercise(parseInt(e.target.value))}
-                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer"
-                />
+                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer" />
+                
               </div>
 
               {/* Sleep Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-350 font-bold font-sans flex items-center gap-1.5 text-[11px]">
-                    <Clock className="h-3.5 w-3.5 text-slate-500" /> Circadian Recovery Loop
+                    <Clock className="h-3.5 w-3.5 text-slate-500" />{t("auto.circadian_recovery_loop", "Circadian Recovery Loop")}
                   </span>
                   <span className="font-mono text-white text-[11px] font-bold">
-                    {simSleep} hrs
+                    {simSleep}{t("auto.hrs", "hrs")}
                   </span>
                 </div>
                 <input
@@ -593,18 +594,18 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                   step="0.5"
                   value={simSleep}
                   onChange={(e) => setSimSleep(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer"
-                />
+                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer" />
+                
               </div>
 
               {/* Water Slider */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-slate-350 font-bold font-sans flex items-center gap-1.5 text-[11px]">
-                    <Activity className="h-3.5 w-3.5 text-slate-500" /> Pure Water Intake
+                    <Activity className="h-3.5 w-3.5 text-slate-500" />{t("auto.pure_water_intake", "Pure Water Intake")}
                   </span>
                   <span className="font-mono text-white text-[11px] font-bold">
-                    {simWater.toFixed(1)} Liters
+                    {simWater.toFixed(1)}{t("auto.liters", "Liters")}
                   </span>
                 </div>
                 <input
@@ -614,35 +615,35 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                   step="0.25"
                   value={simWater}
                   onChange={(e) => setSimWater(parseFloat(e.target.value))}
-                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer"
-                />
+                  className="w-full accent-emerald-500 bg-neutral-900 h-1 rounded-lg cursor-pointer" />
+                
               </div>
 
               {/* Smoking Switch */}
               <div className="grid grid-cols-2 gap-4 pt-1">
                 <div className="space-y-1">
-                  <span className="text-[10px] text-slate-500 uppercase font-bold block font-mono">Tobacco/Nicotine</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-bold block font-mono">{t("auto.tobacco_nicotine", "Tobacco/Nicotine")}</span>
                   <select
                     value={simSmoking}
                     onChange={(e: any) => setSimSmoking(e.target.value)}
-                    className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 text-xs text-white p-2 rounded-xl outline-none cursor-pointer font-sans"
-                  >
-                    <option value="Never">Never Smoked</option>
-                    <option value="Former">Former Smoker</option>
-                    <option value="Active">Active Smoker</option>
+                    className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 text-xs text-white p-2 rounded-xl outline-none cursor-pointer font-sans">
+                    
+                    <option value="Never">{t("auto.never_smoked", "Never Smoked")}</option>
+                    <option value="Former">{t("auto.former_smoker", "Former Smoker")}</option>
+                    <option value="Active">{t("auto.active_smoker", "Active Smoker")}</option>
                   </select>
                 </div>
 
                 <div className="space-y-1">
-                  <span className="text-[10px] text-slate-500 uppercase font-bold block font-mono">Alcohol Load</span>
+                  <span className="text-[10px] text-slate-500 uppercase font-bold block font-mono">{t("auto.alcohol_load", "Alcohol Load")}</span>
                   <select
                     value={simAlcohol}
                     onChange={(e: any) => setSimAlcohol(e.target.value)}
-                    className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 text-xs text-white p-2 rounded-xl outline-none cursor-pointer font-sans"
-                  >
-                    <option value="Never">Teetotaler / Never</option>
-                    <option value="Social">Socially</option>
-                    <option value="Heavy">Heavy Intake</option>
+                    className="w-full bg-zinc-950 border border-zinc-850 hover:border-zinc-800 text-xs text-white p-2 rounded-xl outline-none cursor-pointer font-sans">
+                    
+                    <option value="Never">{t("auto.teetotaler_never", "Teetotaler / Never")}</option>
+                    <option value="Social">{t("auto.socially", "Socially")}</option>
+                    <option value="Heavy">{t("auto.heavy_intake", "Heavy Intake")}</option>
                   </select>
                 </div>
               </div>
@@ -653,10 +654,10 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           {/* Quick guide text */}
           <div className="bg-zinc-950/60 p-4 border border-zinc-900 rounded-2xl text-[10px] font-sans text-slate-400 leading-relaxed space-y-1 inline-block">
             <span className="font-bold text-slate-300 block flex items-center gap-1.5 leading-none">
-              <Info className="h-3.5 w-3.5 text-slate-500" /> Live Synchronized Dynamics
+              <Info className="h-3.5 w-3.5 text-slate-500" />{t("auto.live_synchronized_dynamics", "Live Synchronized Dynamics")}
             </span>
-            <p>
-              Tweak your custom behavioral variables above! The organic simulation engine instantly recalculates hemodynamic forces, glycemic exposure indices, and cellular oxygen transport values to project custom color thresholds in the anatomical model.
+            <p>{t("auto.tweak_your_custom_behavioral_variables_a", "Tweak your custom behavioral variables above! The organic simulation engine instantly recalculates hemodynamic forces, glycemic exposure indices, and cellular oxygen transport values to project custom color thresholds in the anatomical model.")}
+
             </p>
           </div>
         </div>
@@ -665,21 +666,21 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
         <div className="lg:col-span-7 bg-[#0A0A0A]/60 border border-[#1A1A1A] rounded-3xl p-5 flex flex-col items-center justify-between shadow-xl relative min-h-[550px]">
           
           <div className="w-full flex justify-between items-center pb-2 border-b border-zinc-900 z-10">
-            <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest block font-mono">
-              Anatomy Risk Overlay ({projectionMode === "current" ? "Current State" : projectionMode === "future_no_change" ? "No Change Trend" : "Optimized Pattern"})
+            <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest block font-mono">{t("auto.anatomy_risk_overlay", "Anatomy Risk Overlay (")}
+              {projectionMode === "current" ? "Current State" : projectionMode === "future_no_change" ? "No Change Trend" : "Optimized Pattern"})
             </span>
             <div className="flex gap-2">
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping inline-block self-center" />
-              <span className="text-[9px] text-[#A0A0A0] font-bold font-sans">TAP AN ORGAN FOR ANALYSIS CARD</span>
+              <span className="text-[9px] text-[#A0A0A0] font-bold font-sans">{t("auto.tap_an_organ_for_analysis_card", "TAP AN ORGAN FOR ANALYSIS CARD")}</span>
             </div>
           </div>
 
           {/* Visual Legend */}
           <div className="flex gap-4 justify-center items-center py-2.5 z-10 text-[9px] font-bold uppercase font-sans">
-            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block" /> <span>Healthy</span></div>
-            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500 inline-block" /> <span>Moderate</span></div>
-            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-orange-500 inline-block" /> <span>High</span></div>
-            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-red-500 inline-block" /> <span>Critical</span></div>
+            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block" /> <span>{t("auto.healthy", "Healthy")}</span></div>
+            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-yellow-500 inline-block" /> <span>{t("auto.moderate", "Moderate")}</span></div>
+            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-orange-500 inline-block" /> <span>{t("auto.high", "High")}</span></div>
+            <div className="flex items-center gap-1"><span className="h-2.5 w-2.5 rounded-full bg-red-500 inline-block" /> <span>{t("auto.critical", "Critical")}</span></div>
           </div>
 
           {/* SVG Frame and Organ Points */}
@@ -689,10 +690,10 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
             <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none opacity-50" />
             
             {/* SVG Interactive Humanoid */}
-            <svg 
-              viewBox="0 0 240 500" 
-              className="w-auto h-full max-h-[430px] filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]"
-            >
+            <svg
+              viewBox="0 0 240 500"
+              className="w-auto h-full max-h-[430px] filter drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)]">
+              
               {/* Grid calibration markers */}
               <line x1="30" y1="20" x2="30" y2="40" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
               <line x1="20" y1="30" x2="40" y2="30" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
@@ -700,7 +701,7 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
               <line x1="200" y1="470" x2="220" y2="470" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
 
               {/* Main Human physical outline */}
-              <path 
+              <path
                 d="M 120,40 
                    C 100,40 96,55 98,68 
                    C 100,74 104,80 114,84 
@@ -736,11 +737,45 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                    C 128,96 126,90 126,84
                    C 136,80 140,74 142,68
                    C 144,55 140,40 120,40 Z"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 fill="rgba(15, 23, 42, 0.45)"
                 stroke="rgba(255, 255, 255, 0.14)"
                 strokeWidth="1.8"
-                className="transition-all"
-              />
+                className="transition-all" />
+              
 
               {/* ORGAN SVG OVERLAYS */}
 
@@ -753,8 +788,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("brain", currentRisks.brain))}
                 onMouseEnter={() => setHoveredOrgan("brain")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
               {/* 2. Lungs */}
               {/* Left lobe */}
@@ -766,8 +801,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("lungs", currentRisks.lungs))}
                 onMouseEnter={() => setHoveredOrgan("lungs")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
               {/* Right lobe */}
               <path
                 d="M 137,118 C 149,118 153,140 149,159 C 147,171 139,171 132,162 C 130,154 132,131 134,122 Z"
@@ -777,8 +812,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("lungs", currentRisks.lungs))}
                 onMouseEnter={() => setHoveredOrgan("lungs")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
               {/* 3. Heart */}
               <path
@@ -789,8 +824,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("heart", currentRisks.heart))}
                 onMouseEnter={() => setHoveredOrgan("heart")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
               {/* 4. Liver */}
               <path
@@ -801,8 +836,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("liver", currentRisks.liver))}
                 onMouseEnter={() => setHoveredOrgan("liver")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
               {/* 5. Pancreas */}
               <path
@@ -813,8 +848,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-200"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("pancreas", currentRisks.pancreas))}
                 onMouseEnter={() => setHoveredOrgan("pancreas")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
               {/* 6. Kidneys */}
               {/* Left Kidney */}
@@ -826,8 +861,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-205"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("kidneys", currentRisks.kidney))}
                 onMouseEnter={() => setHoveredOrgan("kidneys")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
               {/* Right Kidney */}
               <path
                 d="M 140,222 C 144,222 145,227 143,233 C 140,237 138,235 137,231 C 137,227 139,222 140,222 Z"
@@ -837,8 +872,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 className="transition-all cursor-pointer hover:opacity-100 duration-205"
                 onClick={() => setClickedOrgan(getOrganStaticDetails("kidneys", currentRisks.kidney))}
                 onMouseEnter={() => setHoveredOrgan("kidneys")}
-                onMouseLeave={() => setHoveredOrgan(null)}
-              />
+                onMouseLeave={() => setHoveredOrgan(null)} />
+              
 
             </svg>
 
@@ -851,28 +886,28 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 <div
                   key={org.id}
                   style={{ top: org.y, left: org.x }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center select-none"
-                >
+                  className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center select-none">
+                  
                   <button
                     type="button"
                     onClick={() => setClickedOrgan(getOrganStaticDetails(org.id, staticScore))}
                     onMouseEnter={() => setHoveredOrgan(org.id)}
                     onMouseLeave={() => setHoveredOrgan(null)}
                     className={`h-4.5 w-4.5 rounded-full border border-black/45 cursor-pointer transition-all flex items-center justify-center ${getDotGlowClass(staticScore)} ${
-                      isHovered ? "scale-135 duration-150 ring-4 ring-white/20" : ""
-                    }`}
-                  >
+                    isHovered ? "scale-135 duration-150 ring-4 ring-white/20" : ""}`
+                    }>
+                    
                     <span className="h-2 w-2 rounded-full bg-white block" />
                   </button>
                   
                   {/* Floating labels overlaying nodes */}
                   <span className={`text-[9px] font-black uppercase tracking-wider px-1.5 py-0.2 select-none pointer-events-none mt-1 shadow-md bg-black/85 border border-[#1C1C1C] rounded transition-all leading-none ${
-                    isHovered ? "text-white border-slate-700 font-black scale-105" : "text-slate-500"
-                  }`}>
+                  isHovered ? "text-white border-slate-700 font-black scale-105" : "text-slate-500"}`
+                  }>
                     {org.label} ({staticScore}%)
                   </span>
-                </div>
-              );
+                </div>);
+
             })}
 
             {/* HOVER TOOLTIP CARD */}
@@ -888,8 +923,8 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 15 }}
                     transition={{ duration: 0.12 }}
-                    className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-64 bg-[#0A0A0AD9]/95 backdrop-blur-md border border-[#1F1F1F] rounded-2xl p-4 space-y-3 shadow-2xl z-20 pointer-events-none"
-                  >
+                    className="absolute bottom-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-64 bg-[#0A0A0AD9]/95 backdrop-blur-md border border-[#1F1F1F] rounded-2xl p-4 space-y-3 shadow-2xl z-20 pointer-events-none">
+                    
                     <div className="flex justify-between items-center pb-1.5 border-b border-zinc-900">
                       <span className="text-xs font-black text-white uppercase">{data.name.split("/")[0]}</span>
                       <span className={`text-[8px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded ${colors.badge}`}>
@@ -898,28 +933,28 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                     </div>
 
                     <div className="space-y-1 font-sans">
-                      <div className="text-[10px] text-slate-400">Predicted Organ Risk Coefficient</div>
+                      <div className="text-[10px] text-slate-400">{t("auto.predicted_organ_risk_coefficient", "Predicted Organ Risk Coefficient")}</div>
                       <div className={`text-xl font-black ${colors.text}`}>{calculatedScore}%</div>
                     </div>
 
                     <div className="space-y-1.5 text-[9px] text-slate-400 font-medium">
-                      <div className="font-extrabold uppercase text-[8.5px] text-slate-500">Key Triggers:</div>
+                      <div className="font-extrabold uppercase text-[8.5px] text-slate-500">{t("auto.key_triggers", "Key Triggers:")}</div>
                       <p className="line-clamp-2 leading-relaxed">&bull; {data.contributingFactors[0] || "Metabolic indicators within standard parameters"}</p>
                     </div>
 
-                    <div className="text-[8.5px] font-bold text-emerald-400 uppercase tracking-wider">
-                      Tap organ node to open health modal &rarr;
+                    <div className="text-[8.5px] font-bold text-emerald-400 uppercase tracking-wider">{t("auto.tap_organ_node_to_open_health_modal", "Tap organ node to open health modal \u2192")}
+
                     </div>
-                  </motion.div>
-                );
+                  </motion.div>);
+
               })()}
             </AnimatePresence>
 
           </div>
 
           <div className="w-full bg-[#050505] p-3.5 border border-[#1A1A1A] rounded-2xl flex flex-col sm:flex-row justify-between items-center text-[10px] text-slate-500 font-mono gap-1.5 select-none mt-4">
-            <span className="text-left">* Heatmap dynamic metrics synchronize actively with your sandbox sliders above.</span>
-            <span className="shrink-0 font-bold text-emerald-400">Status: Calibration Stable</span>
+            <span className="text-left">{t("auto.heatmap_dynamic_metrics_synchronize_act", "* Heatmap dynamic metrics synchronize actively with your sandbox sliders above.")}</span>
+            <span className="shrink-0 font-bold text-emerald-400">{t("auto.status_calibration_stable", "Status: Calibration Stable")}</span>
           </div>
         </div>
 
@@ -932,20 +967,20 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
             <BookOpen className="h-4.5 w-4.5" />
           </div>
           <div>
-            <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider font-mono">Personalized Guidance Summary</span>
-            <h4 className="text-xs font-black text-white uppercase tracking-wider">
-              Anatomy Allostatic Load Predictions
+            <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wider font-mono">{t("auto.personalized_guidance_summary", "Personalized Guidance Summary")}</span>
+            <h4 className="text-xs font-black text-white uppercase tracking-wider">{t("auto.anatomy_allostatic_load_predictions", "Anatomy Allostatic Load Predictions")}
+
             </h4>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 leading-relaxed">
           <div className="space-y-2 text-xs font-sans text-slate-350">
-            <p className="font-semibold text-slate-200 uppercase text-[10px] tracking-wider text-emerald-400">
-              Interactive Physiological Assessment
+            <p className="font-semibold text-slate-200 uppercase text-[10px] tracking-wider text-emerald-400">{t("auto.interactive_physiological_assessment", "Interactive Physiological Assessment")}
+
             </p>
-            <p className="leading-relaxed">
-              Based on the computed lifestyle modifiers, your overall allostatic stress indicators are projected to decline significantly upon adhering to customized plans. 
+            <p className="leading-relaxed">{t("auto.based_on_the_computed_lifestyle_modifier", "Based on the computed lifestyle modifiers, your overall allostatic stress indicators are projected to decline significantly upon adhering to customized plans.")}
+
               {simStress > 7 && " Sustained stress levels remain a high predictive factor for cerebral blood vessel tension and insulin output resistance inside hepatic cells."}
               {simSmoking === "Active" && " Current active nicotine input induces elevated inflammatory and oxidative load across alveoli membranes, restricting optimal capillary transport."}
               {simWeight > baselineWeight && " Visibility of viscero-metabolic strain has risen. Restitution of muscular sink capacity is critical."}
@@ -954,21 +989,21 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
           </div>
 
           <div className="space-y-3">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono">
-              Top Simulated Health Targets
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block font-mono">{t("auto.top_simulated_health_targets", "Top Simulated Health Targets")}
+
             </span>
             <div className="space-y-2 text-[11px]">
               <div className="flex gap-2.5 items-start">
                 <CheckCircle className="h-4 w-4 text-emerald-450 shrink-0 mt-0.5" />
                 <p className="text-slate-300">
-                  <strong className="text-white">Active Glycemic Management</strong>: Engage in postpostprandial incline walks to blunten extreme blood sugar spikes and shield beta-cell volume.
+                  <strong className="text-white">{t("auto.active_glycemic_management", "Active Glycemic Management")}</strong>{t("auto.engage_in_postpostprandial_incline_walk", ": Engage in postpostprandial incline walks to blunten extreme blood sugar spikes and shield beta-cell volume.")}
                 </p>
               </div>
 
               <div className="flex gap-2.5 items-start">
                 <CheckCircle className="h-4 w-4 text-emerald-450 shrink-0 mt-0.5" />
                 <p className="text-slate-300">
-                  <strong className="text-white">Capillary Preservation</strong>: Limit refined sodium chloride compounds and introduce nitric-oxide promoters (beets, arugula) to optimize vessel diameter.
+                  <strong className="text-white">{t("auto.capillary_preservation", "Capillary Preservation")}</strong>{t("auto.limit_refined_sodium_chloride_compounds", ": Limit refined sodium chloride compounds and introduce nitric-oxide promoters (beets, arugula) to optimize vessel diameter.")}
                 </p>
               </div>
             </div>
@@ -992,28 +1027,28 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="bg-[#0A0A0A] border border-[#1F1F1F] rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative"
-              >
+                className="bg-[#0A0A0A] border border-[#1F1F1F] rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative">
+                
                 {/* Header background accents */}
-                <div 
-                  className="absolute top-0 left-0 right-0 h-1.5 transition-all" 
-                  style={{ backgroundColor: colors.color }}
-                />
+                <div
+                  className="absolute top-0 left-0 right-0 h-1.5 transition-all"
+                  style={{ backgroundColor: colors.color }} />
+                
 
                 {/* Close Button */}
                 <button
                   type="button"
                   onClick={() => setClickedOrgan(null)}
-                  className="absolute top-4 right-4 p-2 bg-zinc-900 border border-zinc-800 text-slate-400 hover:text-white rounded-xl transition-all cursor-pointer"
-                >
-                  <span className="text-xs uppercase font-extrabold px-1 block">Close</span>
+                  className="absolute top-4 right-4 p-2 bg-zinc-900 border border-zinc-800 text-slate-400 hover:text-white rounded-xl transition-all cursor-pointer">
+                  
+                  <span className="text-xs uppercase font-extrabold px-1 block">{t("auto.close", "Close")}</span>
                 </button>
 
                 <div className="p-6 md:p-8 space-y-6">
                   {/* Title and Badge */}
                   <div className="space-y-1.5 pr-14">
                     <div className="flex items-center gap-2 text-slate-400 text-[10px] uppercase font-bold font-mono">
-                      <Activity className="h-4 w-4 text-slate-500" /> Organ Physiology Intelligence
+                      <Activity className="h-4 w-4 text-slate-500" />{t("auto.organ_physiology_intelligence", "Organ Physiology Intelligence")}
                     </div>
                     <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-tight">
                       {updatedOrganData.name}
@@ -1028,23 +1063,23 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                     
                     {/* Visual Risk Gauge dial */}
                     <div className="bg-[#050505] p-4.5 rounded-2xl border border-zinc-900 flex flex-col items-center justify-center text-center space-y-2 relative overflow-hidden">
-                      <span className="text-[9px] text-[#A0A0A0] font-black uppercase tracking-widest font-mono">Risk Index</span>
+                      <span className="text-[9px] text-[#A0A0A0] font-black uppercase tracking-widest font-mono">{t("auto.risk_index", "Risk Index")}</span>
                       <div className="relative h-24 w-24 flex items-center justify-center">
                         {/* Interactive simple SVG radial chart */}
                         <svg className="absolute inset-0 transform -rotate-90" viewBox="0 0 100 100">
                           <circle cx="50" cy="50" r="42" stroke="#151515" strokeWidth="8" fill="transparent" />
-                          <circle 
-                            cx="50" 
-                            cy="50" 
-                            r="42" 
-                            stroke={colors.color} 
-                            strokeWidth="8.5" 
-                            fill="transparent" 
+                          <circle
+                            cx="50"
+                            cy="50"
+                            r="42"
+                            stroke={colors.color}
+                            strokeWidth="8.5"
+                            fill="transparent"
                             strokeDasharray={2 * Math.PI * 42}
                             strokeDashoffset={2 * Math.PI * 42 * (1 - calculatedScore / 100)}
                             strokeLinecap="round"
-                            className="transition-all duration-500"
-                          />
+                            className="transition-all duration-500" />
+                          
                         </svg>
                         <div className="text-center z-10">
                           <span className="text-2xl font-black text-white font-mono">{calculatedScore}%</span>
@@ -1058,19 +1093,19 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
                     {/* Historical trend index card */}
                     <div className="bg-[#050505] p-4.5 rounded-2xl border border-zinc-900 flex flex-col justify-between space-y-3">
                       <div className="space-y-1.5">
-                        <span className="text-[9px] text-slate-500 uppercase font-bold tracking-widest font-mono block">Dynamic Trend Tracking</span>
+                        <span className="text-[9px] text-slate-500 uppercase font-bold tracking-widest font-mono block">{t("auto.dynamic_trend_tracking", "Dynamic Trend Tracking")}</span>
                         <div className="flex justify-between items-center">
-                          <span className="text-xs text-slate-400">Baseline Prior Score:</span>
+                          <span className="text-xs text-slate-400">{t("auto.baseline_prior_score", "Baseline Prior Score:")}</span>
                           <span className="font-mono text-xs text-white font-bold">{updatedOrganData.lastMonthScore}%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-xs text-slate-400">Current Computed:</span>
+                          <span className="text-xs text-slate-400">{t("auto.current_computed", "Current Computed:")}</span>
                           <span className="font-mono text-xs text-white font-bold">{calculatedScore}%</span>
                         </div>
                       </div>
 
                       <div className={`p-2.5 rounded-xl border flex items-center justify-between text-xs font-bold leading-none ${trend.className}`}>
-                        <span className="uppercase text-[9px] tracking-wider">Metabolic Shift:</span>
+                        <span className="uppercase text-[9px] tracking-wider">{t("auto.metabolic_shift", "Metabolic Shift:")}</span>
                         <span className="flex items-center gap-1">
                           <TrendIcon className="h-4.5 w-4.5 shrink-0" />
                           {trend.text}
@@ -1082,42 +1117,42 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
 
                   {/* Root Contributing factors */}
                   <div className="space-y-2.5">
-                    <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block font-mono">
-                      Organ Biomarkers & Lifestyle Triggers
+                    <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block font-mono">{t("auto.organ_biomarkers_lifestyle_triggers", "Organ Biomarkers & Lifestyle Triggers")}
+
                     </span>
                     <div className="space-y-1.5 font-sans text-xs">
-                      {updatedOrganData.contributingFactors.map((fact, index) => (
-                        <div key={index} className="flex gap-2 items-start py-1.5 px-3 bg-zinc-950/60 border border-neutral-900 rounded-xl leading-relaxed text-slate-300">
+                      {updatedOrganData.contributingFactors.map((fact, index) =>
+                      <div key={index} className="flex gap-2 items-start py-1.5 px-3 bg-zinc-950/60 border border-neutral-900 rounded-xl leading-relaxed text-slate-300">
                           <span className="h-1.5 w-1.5 rounded-full bg-slate-500 shrink-0 mt-2" />
                           <p>{fact}</p>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
 
                   {/* Actions summary recommendations list */}
                   <div className="space-y-2.5">
-                    <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block font-mono">
-                      Personalized Proactive Action Protocol
+                    <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest block font-mono">{t("auto.personalized_proactive_action_protocol", "Personalized Proactive Action Protocol")}
+
                     </span>
                     <div className="space-y-1.5 font-sans text-xs">
-                      {updatedOrganData.recommendations.map((rec, index) => (
-                        <div key={index} className="flex gap-2.5 items-start leading-relaxed text-slate-300">
+                      {updatedOrganData.recommendations.map((rec, index) =>
+                      <div key={index} className="flex gap-2.5 items-start leading-relaxed text-slate-300">
                           <CheckCircle className="h-4.5 w-4.5 text-emerald-450 shrink-0 mt-0.5" />
                           <p>{rec}</p>
                         </div>
-                      ))}
+                      )}
                     </div>
                   </div>
 
                 </div>
 
               </motion.div>
-            </div>
-          );
+            </div>);
+
         })()}
       </AnimatePresence>
 
-    </div>
-  );
+    </div>);
+
 }

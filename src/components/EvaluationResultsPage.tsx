@@ -1,9 +1,10 @@
+import { t } from "i18next";
 import React from "react";
 import { PredictionEngineOutput, UserProfile } from "../types";
-import { 
-  Heart, ShieldCheck, Activity, Award, CheckCircle2, AlertTriangle, ArrowUpRight, 
-  Sparkles, ListCollapse, BookOpenCheck, Info 
-} from "lucide-react";
+import {
+  Heart, ShieldCheck, Activity, Award, CheckCircle2, AlertTriangle, ArrowUpRight,
+  Sparkles, ListCollapse, BookOpenCheck, Info } from
+"lucide-react";
 
 interface EvaluationResultsPageProps {
   evaluation: PredictionEngineOutput | null;
@@ -17,12 +18,12 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
         <div className="mx-auto w-12 h-12 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full flex items-center justify-center animate-pulse">
           <AlertTriangle className="h-6 w-6" />
         </div>
-        <h3 className="text-sm font-black uppercase text-white tracking-wider">No Active Metrics Logged</h3>
-        <p className="text-xs text-slate-500 max-w-sm mx-auto">
-          Please navigate to the "Data Intake" screen and submit your current biomarkers to generate evaluation results.
+        <h3 className="text-sm font-black uppercase text-white tracking-wider">{t("auto.no_active_metrics_logged", "No Active Metrics Logged")}</h3>
+        <p className="text-xs text-slate-500 max-w-sm mx-auto">{t("auto.please_navigate_to_the_data_intake_scree", "Please navigate to the \"Data Intake\" screen and submit your current biomarkers to generate evaluation results.")}
+
         </p>
-      </div>
-    );
+      </div>);
+
   }
 
   const { healthScore } = evaluation;
@@ -33,15 +34,15 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
   // Math helper for individual scores
   const sleepDuration = parseFloat(lifestyle.sleepDuration) || 7;
   const sleepQuality = parseFloat(lifestyle.sleepQuality) || 3;
-  const sleepScore = Math.min(100, Math.round((sleepDuration / 8) * 70 + (sleepQuality / 5) * 30));
+  const sleepScore = Math.min(100, Math.round(sleepDuration / 8 * 70 + sleepQuality / 5 * 30));
 
   const stressLevel = parseFloat(lifestyle.stressLevel) || 5;
   const stressScore = Math.max(10, Math.round(100 - stressLevel * 9));
 
   const steps = selectedRecord.wearableDetails?.steps || 0;
-  const activityScore = steps > 0 
-    ? Math.min(100, Math.round((steps / 10000) * 100))
-    : (lifestyle.physicalActivity === "High" ? 90 : lifestyle.physicalActivity === "Moderate" ? 75 : lifestyle.physicalActivity === "Low" ? 50 : 30);
+  const activityScore = steps > 0 ?
+  Math.min(100, Math.round(steps / 10000 * 100)) :
+  lifestyle.physicalActivity === "High" ? 90 : lifestyle.physicalActivity === "Moderate" ? 75 : lifestyle.physicalActivity === "Low" ? 50 : 30;
 
   const junkFreq = parseFloat(nutrition.junkFood) || 5;
   const sugarFreq = parseFloat(nutrition.sugar) || 5;
@@ -49,12 +50,12 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
   const nutritionScore = Math.max(30, Math.min(100, Math.round(100 - junkFreq * 4 - sugarFreq * 3 + (waterIntake >= 2 ? 10 : 0))));
 
   const scores = [
-    { name: "Health Score", value: healthScore.score, label: healthScore.category + " State", color: "from-emerald-500 to-teal-500", glow: "shadow-emerald-550/10", details: "Overall cardiovascular, metabolic, lifestyle, and stress synthesis." },
-    { name: "Nutrition Score", value: nutritionScore, label: nutritionScore >= 80 ? "Optimal" : nutritionScore >= 60 ? "Moderate" : "Deficient", color: "from-amber-500 to-orange-500", glow: "shadow-amber-500/10", details: "Based on dietary macros, meal scheduling, junk/sugar frequency, and hydration." },
-    { name: "Sleep Balance", value: sleepScore, label: sleepScore >= 85 ? "Excellent Rest" : sleepScore >= 65 ? "Fair Recovery" : "Fragmented", color: "from-sky-500 to-indigo-500", glow: "shadow-sky-550/10", details: "Computed from chronological duration relative to clean circadian targets." },
-    { name: "Stress Resilience", value: stressScore, label: stressScore >= 75 ? "Balanced" : stressScore >= 50 ? "Compensated" : "High Strain", color: "from-purple-500 to-pink-500", glow: "shadow-purple-500/10", details: "Allostatic resilience indexed against behavioral & metabolic anxiety factors." },
-    { name: "Activity Index", value: activityScore, label: activityScore >= 80 ? "Vigorous" : activityScore >= 50 ? "Active" : "Sedentary", color: "from-teal-400 to-emerald-550", glow: "shadow-teal-500/10", details: "Synthesizes metabolic physical activities & wearable chronological steps." }
-  ];
+  { name: "Health Score", value: healthScore.score, label: healthScore.category + " State", color: "from-emerald-500 to-teal-500", glow: "shadow-emerald-550/10", details: "Overall cardiovascular, metabolic, lifestyle, and stress synthesis." },
+  { name: "Nutrition Score", value: nutritionScore, label: nutritionScore >= 80 ? "Optimal" : nutritionScore >= 60 ? "Moderate" : "Deficient", color: "from-amber-500 to-orange-500", glow: "shadow-amber-500/10", details: "Based on dietary macros, meal scheduling, junk/sugar frequency, and hydration." },
+  { name: "Sleep Balance", value: sleepScore, label: sleepScore >= 85 ? "Excellent Rest" : sleepScore >= 65 ? "Fair Recovery" : "Fragmented", color: "from-sky-500 to-indigo-500", glow: "shadow-sky-550/10", details: "Computed from chronological duration relative to clean circadian targets." },
+  { name: "Stress Resilience", value: stressScore, label: stressScore >= 75 ? "Balanced" : stressScore >= 50 ? "Compensated" : "High Strain", color: "from-purple-500 to-pink-500", glow: "shadow-purple-500/10", details: "Allostatic resilience indexed against behavioral & metabolic anxiety factors." },
+  { name: "Activity Index", value: activityScore, label: activityScore >= 80 ? "Vigorous" : activityScore >= 50 ? "Active" : "Sedentary", color: "from-teal-400 to-emerald-550", glow: "shadow-teal-500/10", details: "Synthesizes metabolic physical activities & wearable chronological steps." }];
+
 
   // Biomarker ranges for Explainable AI
   const bloodSugarActual = parseFloat(basicInfo.bloodSugar) || 100;
@@ -63,10 +64,10 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
   const cholesterolActual = parseFloat(basicInfo.cholesterolTotal) || 190;
 
   const biomarkers = [
-    { name: "Fasting Blood Sugar", value: bloodSugarActual, unit: "mg/dL", normal: "70 - 100", status: bloodSugarActual > 100 ? "Elevated (Pre-Diabetic Baseline)" : "In Target", desc: "Indices > 100 signal insulin baseline threshold deviations.", isDeviated: bloodSugarActual > 100 },
-    { name: "Blood Pressure (BP)", value: `${systolicBPActual}/${diastolicBPActual}`, unit: "mmHg", normal: "90/60 - 120/80", status: systolicBPActual > 130 ? "Stage 1 Hypertension" : systolicBPActual > 120 ? "Pre-hypertension Accent" : "Optimal Range", desc: "Systolic above 120 increase arterial stiffness markers.", isDeviated: systolicBPActual > 120 },
-    { name: "Total Cholesterol", value: cholesterolActual, unit: "mg/dL", normal: "130 - 200", status: cholesterolActual > 200 ? "Borderline High Risk" : "Optimized", desc: "Vessel accumulation rises when levels float past 200 mg/dL limits.", isDeviated: cholesterolActual > 200 }
-  ];
+  { name: "Fasting Blood Sugar", value: bloodSugarActual, unit: "mg/dL", normal: "70 - 100", status: bloodSugarActual > 100 ? "Elevated (Pre-Diabetic Baseline)" : "In Target", desc: "Indices > 100 signal insulin baseline threshold deviations.", isDeviated: bloodSugarActual > 100 },
+  { name: "Blood Pressure (BP)", value: `${systolicBPActual}/${diastolicBPActual}`, unit: "mmHg", normal: "90/60 - 120/80", status: systolicBPActual > 130 ? "Stage 1 Hypertension" : systolicBPActual > 120 ? "Pre-hypertension Accent" : "Optimal Range", desc: "Systolic above 120 increase arterial stiffness markers.", isDeviated: systolicBPActual > 120 },
+  { name: "Total Cholesterol", value: cholesterolActual, unit: "mg/dL", normal: "130 - 200", status: cholesterolActual > 200 ? "Borderline High Risk" : "Optimized", desc: "Vessel accumulation rises when levels float past 200 mg/dL limits.", isDeviated: cholesterolActual > 200 }];
+
 
   return (
     <div className="space-y-6" id="evaluation-results-tab-panel">
@@ -75,17 +76,17 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
       <div className="bg-gradient-to-r from-neutral-900 to-neutral-950 border border-[#1E1E1E] rounded-2xl p-5 flex items-center justify-between">
         <div className="space-y-1">
           <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-            High Fidelity Medical Twin Reports
+            <Sparkles className="h-3.5 w-3.5 animate-pulse" />{t("auto.high_fidelity_medical_twin_reports", "High Fidelity Medical Twin Reports")}
+
           </span>
-          <h2 className="text-xl font-black text-white uppercase tracking-tight">Active Evaluation Results</h2>
-          <p className="text-xs text-slate-500">
-            Intelligent scoring and biomarkers validation analyzed on {new Date(selectedRecord.timestamp).toLocaleDateString()}
+          <h2 className="text-xl font-black text-white uppercase tracking-tight">{t("auto.active_evaluation_results", "Active Evaluation Results")}</h2>
+          <p className="text-xs text-slate-500">{t("auto.intelligent_scoring_and_biomarkers_valid", "Intelligent scoring and biomarkers validation analyzed on")}
+            {new Date(selectedRecord.timestamp).toLocaleDateString()}
           </p>
         </div>
         
         <div className="text-right">
-          <span className="text-[10px] text-slate-500 font-mono block">Data Integrity Confidence</span>
+          <span className="text-[10px] text-slate-500 font-mono block">{t("auto.data_integrity_confidence", "Data Integrity Confidence")}</span>
           <span className="text-lg font-black text-emerald-400 font-mono">92.5%</span>
         </div>
       </div>
@@ -95,19 +96,19 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
         <div className="absolute top-0 right-0 h-40 w-40 bg-emerald-500/5 blur-3xl pointer-events-none" />
         <div className="space-y-1 z-10 text-center md:text-left">
           <div className="text-[9px] text-emerald-400 font-black uppercase tracking-widest flex items-center justify-center md:justify-start gap-1 font-mono">
-            <Heart className="h-3 w-3 text-emerald-450 animate-pulse" />
-            Core Twin Integration Feature
+            <Heart className="h-3 w-3 text-emerald-450 animate-pulse" />{t("auto.core_twin_integration_feature", "Core Twin Integration Feature")}
+
           </div>
-          <h3 className="text-sm font-black text-white uppercase tracking-tight">
-            Anatomical Health Risk Heatmap Ready
+          <h3 className="text-sm font-black text-white uppercase tracking-tight">{t("auto.anatomical_health_risk_heatmap_ready", "Anatomical Health Risk Heatmap Ready")}
+
           </h3>
-          <p className="text-xs text-slate-400 max-w-xl">
-            "See your health. Understand your risks. Protect your future." Tap the <strong className="text-emerald-400 font-bold">Health Risk Heatmap</strong> section in the sidebar to interactively simulate liver weight stresses, chronobiological triggers, and respiratory loads on a beautiful color-coded organ schematic!
+          <p className="text-xs text-slate-400 max-w-xl">{t("auto.see_your_health_understand_your_risks_p", "\"See your health. Understand your risks. Protect your future.\" Tap the")}
+            <strong className="text-emerald-400 font-bold">{t("auto.health_risk_heatmap", "Health Risk Heatmap")}</strong>{t("auto.section_in_the_sidebar_to_interactively", "section in the sidebar to interactively simulate liver weight stresses, chronobiological triggers, and respiratory loads on a beautiful color-coded organ schematic!")}
           </p>
         </div>
         <div className="shrink-0 z-10 bg-emerald-500/10 border border-emerald-500/25 px-4 py-2 rounded-xl text-center">
-          <span className="text-[9px] uppercase font-bold text-slate-400 block font-mono">Mapped Organs</span>
-          <span className="text-xs font-black text-emerald-400 font-mono">6 Core Systems &bull; Live</span>
+          <span className="text-[9px] uppercase font-bold text-slate-400 block font-mono">{t("auto.mapped_organs", "Mapped Organs")}</span>
+          <span className="text-xs font-black text-emerald-400 font-mono">{t("auto.6_core_systems_live", "6 Core Systems \u2022 Live")}</span>
         </div>
       </div>
 
@@ -115,12 +116,12 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {scores.map((score, idx) => {
           const circumference = 2 * Math.PI * 36;
-          const strokeOffset = circumference - (circumference * score.value) / 100;
+          const strokeOffset = circumference - circumference * score.value / 100;
           return (
-            <div 
-              key={idx} 
-              className={`bg-[#0A0A0A] border border-[#1A1A1A] p-4.5 rounded-2xl flex flex-col items-center text-center space-y-3 shadow-lg hover:border-[#222] transition-all`}
-            >
+            <div
+              key={idx}
+              className={`bg-[#0A0A0A] border border-[#1A1A1A] p-4.5 rounded-2xl flex flex-col items-center text-center space-y-3 shadow-lg hover:border-[#222] transition-all`}>
+              
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{score.name}</span>
               
               <div className="relative w-24 h-24 flex items-center justify-center">
@@ -135,8 +136,8 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeOffset}
                     strokeLinecap="round"
-                    style={{ stroke: `url(#gradient-${idx})` }}
-                  />
+                    style={{ stroke: `url(#gradient-${idx})` }} />
+                  
                   <defs>
                     <linearGradient id={`gradient-${idx}`} x1="0%" y1="0%" x2="100%" y2="100%">
                       <stop offset="0%" stopColor="#10b981" />
@@ -155,8 +156,8 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
                   {score.label}
                 </span>
               </div>
-            </div>
-          );
+            </div>);
+
         })}
       </div>
 
@@ -169,17 +170,17 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
               <Award className="h-4.5 w-4.5" />
             </div>
             <div>
-              <h3 className="text-xs font-black uppercase text-white tracking-widest">Explainable AI Scoring Core</h3>
-              <p className="text-[10px] text-slate-500">Autonomous mathematical baseline and clinical compliance model explanations.</p>
+              <h3 className="text-xs font-black uppercase text-white tracking-widest">{t("auto.explainable_ai_scoring_core", "Explainable AI Scoring Core")}</h3>
+              <p className="text-[10px] text-slate-500">{t("auto.autonomous_mathematical_baseline_and_cli", "Autonomous mathematical baseline and clinical compliance model explanations.")}</p>
             </div>
           </div>
 
           <div className="space-y-4">
-            {scores.map((score, sIdx) => (
-              <div key={sIdx} className="p-3.5 bg-[#050505] border border-[#161616] rounded-xl space-y-1.5 hover:bg-[#0C0C0C]/50 transition-colors">
+            {scores.map((score, sIdx) =>
+            <div key={sIdx} className="p-3.5 bg-[#050505] border border-[#161616] rounded-xl space-y-1.5 hover:bg-[#0C0C0C]/50 transition-colors">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-white uppercase">{score.name} Calculation</span>
-                  <span className="text-[10px] font-mono text-emerald-400 font-extrabold bg-emerald-500/5 px-1.5 py-0.5 rounded border border-emerald-500/10">Value: {score.value}/100</span>
+                  <span className="text-xs font-bold text-white uppercase">{score.name}{t("auto.calculation", "Calculation")}</span>
+                  <span className="text-[10px] font-mono text-emerald-400 font-extrabold bg-emerald-500/5 px-1.5 py-0.5 rounded border border-emerald-500/10">{t("auto.value", "Value:")}{score.value}/100</span>
                 </div>
                 <p className="text-[11px] text-slate-400 leading-relaxed font-sans">{score.details}</p>
                 <div className="text-[10px] text-slate-500 font-mono flex items-center gap-1.5 bg-[#070707] p-2 rounded-lg border border-[#121212] mt-1">
@@ -193,7 +194,7 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
                   </span>
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
@@ -204,25 +205,25 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
               <BookOpenCheck className="h-4.5 w-4.5" />
             </div>
             <div>
-              <h3 className="text-xs font-black uppercase text-white tracking-widest">Biomarkers Reference Bounds</h3>
-              <p className="text-[10px] text-slate-500">Early warning validation against absolute clinical reference limits.</p>
+              <h3 className="text-xs font-black uppercase text-white tracking-widest">{t("auto.biomarkers_reference_bounds", "Biomarkers Reference Bounds")}</h3>
+              <p className="text-[10px] text-slate-500">{t("auto.early_warning_validation_against_absolut", "Early warning validation against absolute clinical reference limits.")}</p>
             </div>
           </div>
 
           <div className="space-y-4">
-            {biomarkers.map((marker, mIdx) => (
-              <div 
-                key={mIdx} 
-                className={`p-4 rounded-xl border transition-all ${
-                  marker.isDeviated 
-                    ? "border-amber-500/30 bg-amber-550/5 shadow-inner" 
-                    : "border-[#1A1A1A] bg-[#070707]"
-                }`}
-              >
+            {biomarkers.map((marker, mIdx) =>
+            <div
+              key={mIdx}
+              className={`p-4 rounded-xl border transition-all ${
+              marker.isDeviated ?
+              "border-amber-500/30 bg-amber-550/5 shadow-inner" :
+              "border-[#1A1A1A] bg-[#070707]"}`
+              }>
+              
                 <div className="flex justify-between items-start">
                   <div>
                     <span className="text-xs font-black text-white block tracking-tight uppercase">{marker.name}</span>
-                    <span className="text-[10px] text-slate-550 block font-mono">Normal Limit: {marker.normal} {marker.unit}</span>
+                    <span className="text-[10px] text-slate-550 block font-mono">{t("auto.normal_limit", "Normal Limit:")}{marker.normal} {marker.unit}</span>
                   </div>
                   
                   <div className="text-right">
@@ -240,12 +241,12 @@ export default function EvaluationResultsPage({ evaluation, selectedRecord }: Ev
                   <span>{marker.desc}</span>
                 </p>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
       </div>
 
-    </div>
-  );
+    </div>);
+
 }
