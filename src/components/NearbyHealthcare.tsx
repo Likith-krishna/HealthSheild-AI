@@ -492,8 +492,12 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
 
   // Run on mount to initialize location center
   useEffect(() => {
-    triggerGpsLookup();
-  }, []);
+    if (user.address) {
+      geocodeAddressFallback(user.address);
+    } else {
+      triggerGpsLookup();
+    }
+  }, [user.address]);
 
   // Compute actual distance between coordinates using classical Haversine
   const calculateDistanceKm = (pos1: { lat: number; lng: number }, pos2: { lat: number; lng: number }) => {
