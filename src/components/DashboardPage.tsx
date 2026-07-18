@@ -1106,4 +1106,4 @@ export default function DashboardPage({ currentUser, onLogout }: DashboardPagePr
       </div>
     </div>);
 
-}
+} 

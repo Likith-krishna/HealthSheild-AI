@@ -202,4 +202,4 @@ export default function NutritionGuidePage({ evaluation, selectedRecord }: Nutri
 
     </div>);
 
-}
+} 

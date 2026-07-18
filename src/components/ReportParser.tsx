@@ -363,4 +363,4 @@ Patient notes: Chronic heavy smoker, displays morning fatigue and respiratory co
       </div>
     </div>);
 
-}
+} 

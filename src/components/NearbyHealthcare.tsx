@@ -948,4 +948,4 @@ export default function NearbyHealthcare({ evaluation, selectedRecord, user }: N
 
     </div>);
 
-}
+} 

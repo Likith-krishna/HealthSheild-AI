@@ -318,4 +318,4 @@ export default function AIPredictions({ evaluation }: AIPredictionsProps) {
       }
     </div>);
 
-}
+} 

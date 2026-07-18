@@ -299,4 +299,4 @@ export default function DigitalTwin({ originalProfile, currentEvaluation }: Digi
       </div>
     </div>);
 
-}
+} 

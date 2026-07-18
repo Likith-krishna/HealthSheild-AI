@@ -1048,4 +1048,4 @@ export default function ReportSimplifierPage({ user }: {user: any;}) {
 
     </div>);
 
-}
+} 

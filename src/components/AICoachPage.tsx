@@ -79,4 +79,4 @@ export default function AICoachPage({ evaluation, selectedRecord }: AICoachPageP
 
     </div>);
 
-}
+} 

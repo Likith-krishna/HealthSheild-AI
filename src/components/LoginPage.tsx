@@ -363,4 +363,4 @@ export default function LoginPage({ onLoginSuccess, onNavigateToRegister }: Logi
       </AnimatePresence>
     </div>);
 
-}
+} 

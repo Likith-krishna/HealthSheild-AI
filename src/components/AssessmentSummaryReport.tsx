@@ -592,4 +592,4 @@ export default function AssessmentSummaryReport({ evaluation, selectedRecord, us
       </div>
     </div>);
 
-}
+} 

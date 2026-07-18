@@ -1270,4 +1270,4 @@ export default function MedicationManager() {
       }
     </div>);
 
-}
+} 

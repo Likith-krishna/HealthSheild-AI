@@ -541,3 +541,4 @@ export function getParameterExplanation(name: string, value: number): {
     actions: matched.actions[status.toLowerCase() as "normal" | "high" | "low"]
   };
 }
+ 

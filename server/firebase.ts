@@ -96,3 +96,4 @@ if (fs.existsSync(configPath)) {
 }
 
 export { firestoreDb, isFirebaseActive };
+ 

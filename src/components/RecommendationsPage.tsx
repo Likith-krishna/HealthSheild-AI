@@ -203,4 +203,4 @@ export default function RecommendationsPage({ evaluation, selectedRecord }: Reco
 
     </div>);
 
-}
+} 

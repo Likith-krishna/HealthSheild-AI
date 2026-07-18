@@ -1155,4 +1155,4 @@ export default function HealthRiskHeatmap({ evaluation, selectedRecord, user }: 
 
     </div>);
 
-}
+} 

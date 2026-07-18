@@ -996,4 +996,4 @@ export default function AIHealthTwin({ selectedRecord, evaluation, user }: AIHea
 
     </div>);
 
-}
+} 
